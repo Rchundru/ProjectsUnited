@@ -9,11 +9,11 @@
     <div class="mypanel"></div>
 
     <script>
-    //$.getJSON('https://csc-394-backend.herokuapp.com/users/ggk', function(data) {
-    $.getJSON('http://time.jsontest.com', function(data) {
+    $.getJSON('https://csc-394-backend.herokuapp.com/users/ggk', function(data) {
+    //$.getJSON('https://ipinfo.io/json', function(data) {
         
-       var text = `Date: ${data.date}<br>`
-      //var text = `Name: ${data.first_name}<br>`
+       //var text = `Date: ${data.date}<br>`
+      var text = `IP: ${data.first_name}<br>`
                     
         
         $(".mypanel").html(text);
