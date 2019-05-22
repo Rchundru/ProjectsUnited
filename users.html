@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+</head>
+
+<body>
+
+    <h2>Delete Users:</h2>
+    <div ng-app="">
+
+Username: <input type="text" ng-model="username">
+Email: <input type="text" ng-model="email">
+Password: <input type="text" ng-model="password">
+First name: <input type="text" ng-model="firstname">
+Last name: <input type="text" ng-model="lastname">
+Authentication level: <input type="text" ng-model="authlvl">
+<button onclick="deleteUser(username,email,password,firstname,lastname,authlvl)">Delete user</button>
+
+</div>
+<script>
+
+    function deleteUser(username, email, password, firstname, lastname, authlvl){
+        var jsonObj = '{"username":' + username + ','+
+            '"email":' + email + ','+
+            '"password":' + password + ',' +
+            '"first_name":' + firstname + ',' +
+            '"last_name":' + lastname + ',' + 
+            '"auth_level":' + authlvl + ',' +'}';
+        var obj = JSON.parse(jsonObj);
+        var config = { data:JSON.stringify(obj) };
+        $http.delete('https://csc-394-backend.herokuapp.com/users/', config).success(function(data) {
+            
+            console.log(data);
+        });
+                                                                                
+
+    }
+    
+    </script>
+    
+    <h2>Users:</h2>
+    <p id="demo"></p>
+
+    <script>
+    $.getJSON('https://csc-394-backend.herokuapp.com/users/', function(data) {
+        var jsonObjs = JSON.stringify(data);
+        document.getElementById("demo").innerHTML = jsonObjs;
+    });
+   
+    </script>
+    
+</body>
+</html>
