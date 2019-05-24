@@ -3,6 +3,7 @@
 <head>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+   
 </head>
 
 <body>
@@ -10,19 +11,23 @@
     <h2>Delete Users:</h2>
     <div ng-app="">
 
-Username: <input type="text" ng-model="username">
+<!--Username: <input type="text" ng-model="username">
 Email: <input type="text" ng-model="email">
 Password: <input type="text" ng-model="password">
 First name: <input type="text" ng-model="firstname">
 Last name: <input type="text" ng-model="lastname">
 Authentication level: <input type="text" ng-model="authlvl">
-<button onclick="deleteUser(username,email,password,firstname,lastname,authlvl)">Delete user</button>
+<button onclick="deleteUser(username,email,password,firstname,lastname,authlvl)">Delete user</button> -->
+        
+<form>Username:<input id="USERNAME" type="text" ng-model="username"></form>
+<input type="submit" onclick="deleteUser()" value="Delete">
+<p id=url></p>
 
 </div>
 <script>
 
-    function deleteUser(username, email, password, firstname, lastname, authlvl){
-        var jsonObj = '{"username":' + username + ','+
+    function deleteUser(){
+   /*     var jsonObj = '{"username":' + username + ','+
             '"email":' + email + ','+
             '"password":' + password + ',' +
             '"first_name":' + firstname + ',' +
@@ -33,10 +38,24 @@ Authentication level: <input type="text" ng-model="authlvl">
         $http.delete('https://csc-394-backend.herokuapp.com/users/', config).success(function(data) {
             
             console.log(data);
-        });
-                                                                                
+        }); */
+        var username= document.getElementById("USERNAME").value;
+                $.ajax({
+                    url: "https://csc-394-backend.herokuapp.com/users/" + username,
+                    type: "DELETE",
+                    success: function(msg){
+                        alert("Data Deleted: " + msg);
+                    }
+                }); 
+        var url = "https://csc-394-backend.herokuapp.com/users/" + username;
+        document.getElementById("url").innerHTML = url;
+        $.getJSON('https://csc-394-backend.herokuapp.com/users/', function(data) {
+        var jsonObjs = JSON.stringify(data);
+        document.getElementById("demo").innerHTML = jsonObjs;
+    });
 
-    }
+    } 
+
     
     </script>
     
