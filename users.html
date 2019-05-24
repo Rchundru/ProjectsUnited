@@ -85,49 +85,63 @@ body {
     
     <a href="login.html" text align="right">Log Out</a>
     
-    <
+    
 
   <a href="javascript:void(0);" class="icon" onclick="myFunction()">
     <i class="fa fa-bars"></i>
   </a>
 </div>
 <div class="topnav b" >
-    <h2>Users</h2>
+    <h2>View, Edit, and Delete Users</h2>
     
     
 </div>
 
-    <h2>Delete Users:</h2>
+    <h2>Edit User:</h2>
     <div ng-app="">
 
-<!--Username: <input type="text" ng-model="username">
-Email: <input type="text" ng-model="email">
-Password: <input type="text" ng-model="password">
-First name: <input type="text" ng-model="firstname">
-Last name: <input type="text" ng-model="lastname">
-Authentication level: <input type="text" ng-model="authlvl">
-<button onclick="deleteUser(username,email,password,firstname,lastname,authlvl)">Delete user</button> -->
-        
+<form>Username: <input id = "uName" type="text" ng-model="editUsername">
+Email: <input id = "EMAIL" type="text" ng-model="email">
+Password: <input id = "PASSWORD" type="text" ng-model="password">
+First name: <input id = "FIRSTNAME" type="text" ng-model="firstname">
+Last name: <input id = "LASTNAME" type="text" ng-model="lastname">
+Authentication level: <input id = "AUTHLVL" type="text" ng-model="authlvl">
+</form>
+<input type="submit" onclick="editUser()" value = "Edit">
+<h2>Delete User:</h2>   
 <form>Username:<input id="USERNAME" type="text" ng-model="username"></form>
 <input type="submit" onclick="deleteUser()" value="Delete">
 <p id=url></p>
+<p id=user></p>
 
 </div>
 <script>
-
+    function editUser(){
+        var username= document.getElementById("uName").value;
+        var email = document.getElementById("EMAIL").value; 
+        var password = document.getElementById("PASSWORD").value;
+        var firstname = document.getElementById("FIRSTNAME").value;
+        var lastname = document.getElementById("LASTNAME").value;
+        var authlvl = document.getElementById("AUTHLVL").value;
+         var jsonObj = '{"username":' + '"' + username + '"' + ','+
+            '"email":' + '"' + email + '"' + ','+
+            '"password":' + '"' + password + '"' + ',' +
+            '"first_name":' + '"' + firstname + '"' + ',' +
+            '"last_name":' + '"' + lastname + '"' + ',' + 
+            '"auth_level":' + '"' + authlvl + '"' +'}';
+        $.ajax({
+            url: "https://csc-394-backend.herokuapp.com/users/" + username,
+            type: "PUT",
+            data: jsonObj,
+            success: function(msg){
+                alert("Success");
+            }
+        })
+        document.getElementById("user").innerHTML = jsonObj;
+    }
+</script>
+<script>
     function deleteUser(){
-   /*     var jsonObj = '{"username":' + username + ','+
-            '"email":' + email + ','+
-            '"password":' + password + ',' +
-            '"first_name":' + firstname + ',' +
-            '"last_name":' + lastname + ',' + 
-            '"auth_level":' + authlvl + ',' +'}';
-        var obj = JSON.parse(jsonObj);
-        var config = { data:JSON.stringify(obj) };
-        $http.delete('https://csc-394-backend.herokuapp.com/users/', config).success(function(data) {
-            
-            console.log(data);
-        }); */
         var username= document.getElementById("USERNAME").value;
                 $.ajax({
                     url: "https://csc-394-backend.herokuapp.com/users/" + username,
@@ -141,14 +155,12 @@ Authentication level: <input type="text" ng-model="authlvl">
         $.getJSON('https://csc-394-backend.herokuapp.com/users/', function(data) {
         var jsonObjs = JSON.stringify(data);
         document.getElementById("demo").innerHTML = jsonObjs;
-    });
+        });
 
     } 
-
+</script>
     
-    </script>
-    
-    <h2>Users:</h2>
+    <h2>Registered Users:</h2>
     <p id="demo"></p>
 
     <script>
