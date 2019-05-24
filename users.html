@@ -106,8 +106,6 @@ body {
         <h2>Delete User:</h2>   
         <form>Username:<input id="USERNAME" type="text" ng-model="username" required></form>
         <input type="submit" onclick="deleteUser()" value="Delete">
-        <p id=url></p>
-        <p id=user></p>
     </div>
     <script>
         function editUser(){
@@ -125,10 +123,14 @@ body {
                 '"auth_level":' + '"' + authlvl + '"' +'}';
             $.ajax({
                 url: "https://csc-394-backend.herokuapp.com/users/" + username,
+                contentType: "application/json",
                 type: "PUT",
-                data: jsonObj,
+                data: JSON.stringify(jsonObj),
                 success: function(msg){
                     alert("Success");
+                },
+                error: function(msg){
+                    alert("user not found, please enter a valid username");
                 }
             })
             $.getJSON('https://csc-394-backend.herokuapp.com/users/', function(data) {
@@ -145,7 +147,10 @@ body {
                     url: "https://csc-394-backend.herokuapp.com/users/" + username,
                     type: "DELETE",
                     success: function(msg){
-                        alert("Data Deleted: " + msg);
+                        alert("User deleted: " + msg);
+                    },
+                    error: function(msg){
+                        alert(("Unknown user, please enter a valid username"))
                     }
                 }); 
         var url = "https://csc-394-backend.herokuapp.com/users/" + username;
