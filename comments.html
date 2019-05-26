@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+body {
+  margin: 0;
+  font-family: cursive,Helvetica, sans-serif;
+  color: black;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+.topnav b {
+  overflow: hidden;
+  background-color: #333;
+}
+.topnav b {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 30px 30px;
+  text-decoration: none;
+  font-size: 25px;  
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 30px 30px;
+  text-decoration: none;
+  font-size: 17px;
+
+  
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #2196F3;
+  color: white;
+}
+.topnav .icon {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
+</style>
+</head>
+<body>
+    <div class="topnav" id="myTopnav">
+        <a href="#classes" class ="active">Classes</a>
+        <a href="#notifications">Notifications</a>
+        <a href="#grades">Grades</a>
+        <a href="#about">About</a>
+        <a href="login.html" text align="right">Log Out</a>
+    
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+    <div class="topnav b">
+        <h2>Comments</h2>    
+    </div>
+    
+     <div ng-app="">
+         
+         <h2>Edit Comment:</h2> 
+        <form>CID: <input id = "Cid" type="text" ng-model="cid">
+            Author: <input id = "AUTHOR" type="text" ng-model="authos">
+            Status: <input id = "STATUS" type="text" ng-model="status">
+            Body: <input id = "BODY" type="text" ng-model="body">
+        </form>
+         <p id = "url"></p>
+        <input type="submit" onclick="editComment()" value = "Edit">
+        <h2>Delete Comment:</h2>   
+        <form>CID:<input id="CID" type="text" ng-model="username" required></form>
+        <input type="submit" onclick="deleteComment()" value="Delete">
+    </div>
+    
+     <script>
+        function editComment(){
+            var CID= document.getElementById("Cid").value;
+            var author = document.getElementById("AUTHOR").value;
+            var status = document.getElementById("STATUS").value;
+            var body = document.getElementById("BODY").value;
+            var jsonObj = '{"author":' + '"' + author + '"' + ','+
+                '"status":' + '"' + status + '"' + ','+
+                '"body":' + '"' + body + '"' +'}';
+            $.ajax({
+                url: "https://csc-394-backend.herokuapp.com/comments/" + CID,
+                contentType: "application/json",
+                type: "PUT",
+                data: JSON.stringify(jsonObj),
+                success: function(msg){
+                    alert("Success");
+                },
+                error: function(msg){
+                    alert("user not found, please enter a valid username");
+                }
+            });
+            document.getElementById("url").innerHTML = "https://csc-394-backend.herokuapp.com/comments/" + CID;
+        }
+    </script>
+    
+    <script>
+        function deleteComment(){
+            var cid = document.getElementById("CID").value;
+                $.ajax({
+                    url: "https://csc-394-backend.herokuapp.com/comments/" + cid,
+                    type: "DELETE",
+                    success: function(msg){
+                        alert("Comment deleted: " + msg);
+                    },
+                    error: function(msg){
+                        alert(("Unknown comment, please enter a valid CID"))
+                    }
+                }); 
+        } 
+    </script>
+    <div id="allComments"></div>
+
+    <script>
+        $.getJSON('https://csc-394-backend.herokuapp.com/comments/', function(data) {
+            var jsonObjs = JSON.stringify(data);
+            var jsonArray = jsonObjs.split();
+            var str = "";
+            for(var i = 0; i<jsonArray.length; i++){
+                str += jsonArray[i] + '\n';
+            }
+            document.getElementById("allComments").innerHTML = str;
+        });
+    </script>
+    <br>
+    <div align="center">
+    <form id="usrform">
+        Username: <input type="text" id = "username" name="usrname">
+    </form>
+    <br>
+comment
+    <br><textarea rows="4" id = "comment" cols="50" name="comment" form="usrform" >
+    </textarea>
+        <br>
+    <input type="submit" onclick="addComment()">
+    </div>
+    <script>
+        function addComment(){
+            var CID = Math.floor(Math.random() * 100);
+            var USERNAME = document.getElementById("username").value;
+            var COMMENT = document.getElementById("comment").value;
+            var status = "thumbs up";
+            var jsonObj = '{"CID":' + '"' + CID + '"' + ','+
+                '"AUTHOR":' + '"' + USERNAME + '"' + ','+
+                '"STATUS":' + '"' + status + '"' + ',' +
+                '"BODY":' + '"' + COMMENT + '"' + '}';
+             $.ajax({
+                url: "https://csc-394-backend.herokuapp.com/comments/",
+                datatype: "json",
+                contentType: "application/json",
+                type: "POST",
+                data: JSON.stringify(jsonObj),
+            });
+
+        }
+    </script>
+    
+</body>
+</html>
