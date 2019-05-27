@@ -82,6 +82,7 @@ body {
   <a href="#grades">Grades</a>
     <a href="Admin - assignments.html">Assignments</a>
     <a href="Admin - projects.html">Projects</a>
+    <a href="users.html">Users</a>
     <a href="class-sections.html">Log A</a>
     
     <a href="login.html" text align="right">Log Out</a>
@@ -111,33 +112,42 @@ body {
     <div ng-app="">
 
         <form>
-            Sub Project ID:<br> <input id = "uName" type="text" ng-model="editUsername" required><br>
-            Parent:<br> <input id = "EMAIL" type="text" ng-model="email" required><br>
-            Sub Project Name:<br><input id = "PASSWORD" type="text" ng-model="password" required><br>
-            Due Date:<br> <input id = "FIRSTNAME" type="text" ng-model="firstname" required><br>
-            Status: <br><input id = "LASTNAME" type="text" ng-model="lastname" required><br><br>
+            Sub Project ID:<br> <input id = "SID" type="text" ng-model="sid" required><br>
+            Parent:<br> <input id = "PARENT" type="text" ng-model="parent" required><br>
+            Sub Project Name:<br><input id = "SNAME" type="text" ng-model="sname" required><br>
+            Due Date:<br> <input id = "DDATE" type="text" ng-model="due_date" required><br>
+            Status: <br><input id = "STAT" type="text" ng-model="status" required><br><br>
         </form>
-        <input type="submit" onclick="editUser()" value = "Edit">
+        
+        <input type="submit" onclick="editSPro()" value = "Edit">
+        
         <h2>Delete Sub Project:</h2>   
-        <form>Sub Projects: <input id="PRO" type="text" ng-model="subprojects" required></form>
+        
+        <form>
+            Sub Projects: <input id="PRO" type="text" ng-model="subprojects" required>
+        </form>
         <input type="submit" onclick="deletePro()" value="Delete">
+        
     </div>
+    
+    <hr>
+    
     <script>
-        function editUser(){
-            var username= document.getElementById("uName").value;
-            var email = document.getElementById("EMAIL").value; 
-            var password = document.getElementById("PASSWORD").value;
-            var firstname = document.getElementById("FIRSTNAME").value;
-            var lastname = document.getElementById("LASTNAME").value;
-            var authlvl = document.getElementById("AUTHLVL").value;
-            var jsonObj = '{"username":' + '"' + username + '"' + ','+
-                '"email":' + '"' + email + '"' + ','+
-                '"password":' + '"' + password + '"' + ',' +
-                '"first_name":' + '"' + firstname + '"' + ',' +
-                '"last_name":' + '"' + lastname + '"' + ',' + 
-                '"auth_level":' + '"' + authlvl + '"' +'}';
+        function editSPro(){
+            var subid= document.getElementById("SID").value;
+            var par = document.getElementById("PARENT").value; 
+            var sname =   document.getElementById("SNAME").value;
+            var ddate = document.getElementById("DDATE").value;
+            var stat = document.getElementById("STAT").value;
+
+            var jsonObj = '{"sid":' + '"' + subid + '"' + ','+
+                          '"parent":' + '"' + par + '"' + ','+
+                          '"sname":' + '"' + sname + '"' + ',' +
+                          '"due_date":' + '"' + ddate + '"' + ',' +
+                          '"status":' + '"' + stat + '"' +'}';
+            
             $.ajax({
-                url: "https://csc-394-backend.herokuapp.com/users/" + username,
+                url: "https://csc-394-backend.herokuapp.com/subprojects/" + sname,
                 contentType: "application/json",
                 type: "PUT",
                 data: JSON.stringify(jsonObj),
@@ -145,14 +155,14 @@ body {
                     alert("Success");
                 },
                 error: function(msg){
-                    alert("user not found, please enter a valid username");
+                    alert("Sub Project not found, please enter a valid sub project name");
                 }
             })
-            $.getJSON('https://csc-394-backend.herokuapp.com/users/', function(data) {
+            $.getJSON('https://csc-394-backend.herokuapp.com/subprojects/', function(data) {
                 var jsonObjs = JSON.stringify(data);
-                document.getElementById("userList").innerHTML = jsonObjs;
+                document.getElementById("subprojectsList").innerHTML = jsonObjs;
             });
-            document.getElementById("user").innerHTML = jsonObj;
+            document.getElementById("subprojects").innerHTML = jsonObj;
         }
     </script>
     <script>
