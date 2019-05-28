@@ -2,47 +2,26 @@
 <html>
 <head>
     
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-.dropbtn {
-  background-color: #3498DB;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+body {background: grey;padding: 40px}
+
+.comment_div {
+    background: white;
+    width: 250px;
+    padding: 10px;
+    display: block;
 }
 
-.dropbtn:hover, .dropbtn:focus {
-  background-color: #2980B9;
+.pointer {
+    border: solid 20px transparent;
+    border-right-color: #fff;
+    position: absolute;
+    margin: 40px 0 0 -38px;
+    z-index: 999;
 }
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
-  overflow: auto;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown a:hover {background-color: #ddd;}
-
-.show {display: block;}
 </style>
 <style>
 .btn {
@@ -198,14 +177,53 @@ body {
     
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
      <div class="mypanel" align="right"></div>
+	
 
-    <script>
-    $.getJSON('https://csc-394-backend.herokuapp.com/users/ggk', function(data) {
-      var text = `${data.first_name} ${data.last_name}<br>`
+
+    <!-- <script> -->
+    <!-- $.getJSON('https://csc-394-backend.herokuapp.com/users/ggk', function(data) { -->
+      <!-- var text = `${data.first_name} ${data.last_name}<br>` -->
                     
-        $(".mypanel").html(text);
-    });
+        <!-- $(".mypanel").html(text); -->
+    <!-- }); -->
+    <!-- </script> -->
+
+	
+	
+	
+	 <script>
+        function editAssignment(){
+            
+            var assignmentid= document.getElementById("AID").value;
+            var owner = document.getElementById("OWNER").value; 
+            var aname = document.getElementById("ANAME").value;
+            var project = document.getElementById("PRO").value;
+            var jsonObj = '{"aid":' + '"' + assignmentid + '"' + ','+
+                          '"owner":' + '"' + owner + '"' + ','+
+                          '"aname":' + '"' + aname + '"' + ',' +
+                          '"project":' + '"' + project + '"' +'}';
+            
+            $.ajax({
+                url: "https://csc-394-backend.herokuapp.com/assignments/" + aname,
+                contentType: "application/json",
+                type: "PUT",
+                data: JSON.stringify(jsonObj),
+                success: function(msg){
+                    alert("Success");
+                },  
+                error: function(msg){
+                    alert("Assignment not found, please enter a valid assignment name.");
+                }
+            })
+            $.getJSON('https://csc-394-backend.herokuapp.com/assignments/', function(data) {
+                var jsonObjs = JSON.stringify(data);
+                document.getElementById("assignmentsList").innerHTML = jsonObjs;
+            });
+            
+            document.getElementById("assignments").innerHTML = jsonObj;
+        }
     </script>
+    
 
   <a href="javascript:void(0);" class="icon" onclick="myFunction()">
     <i class="fa fa-bars"></i>
@@ -222,11 +240,6 @@ body {
 </div>-->
 
 <!-- <h1>Outline Buttons</h1> -->
-
-   
-<a href="class-description.html"><button class="btn class1">Assignment 1</button></a>
-<button class="btn class2">Assignments 2</button>
-<button class="btn class3">Assignments 3</button>
     
     
     
@@ -240,36 +253,28 @@ function myFunction() {
   }
 }
 </script>
-    <div class="dropdown">
-  <button onclick="myFunction()" class="dropbtn">Options</button>
-  <div id="myDropdown" class="dropdown-content">
-    <a href="assignments - Admin.html">View Assignments</a>
-    <a href="#edit">Edit Assignments</a>
-    <a href="#delete">Delete Assignments</a>
-  </div>
+  <button onclick="myFunction()" class="">Comments</button>
+  <div class="pointer"></div>
+
+<div class="comment_div">
+ 
+</div>
 </div>
 
-<script>
-/* When the user clicks on the button, 
-toggle between hiding and showing the dropdown content */
-function myFunction() {
-  document.getElementById("myDropdown").classList.toggle("show");
-}
 
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-}
-</script>
+
+    <h2>Assignments:</h2>
+    <p id="assignmentsList"></p>
+
+    <script>	
+	
+	      $.getJSON('https://csc-394-backend.herokuapp.com/assignments/', function(data) {
+            var jsonObjs = JSON.stringify(data);
+            document.getElementById("assignmentsList").innerHTML = jsonObjs;
+        });
+  
+    </script>
+
 
 
 </body>
