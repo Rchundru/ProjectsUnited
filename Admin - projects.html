@@ -82,6 +82,8 @@ body {
   <a href="#grades">Grades</a>
     <a href="Admin - subprojects.html">Sub-Projects</a>
     <a href="Admin - assignments.html">Assignments</a>
+    <a href="users.html">Users</a>
+    <a href="comments.html">Comments</a>
     <a href="class-sections.html">Log A</a>
     
     <a href="login.html" text align="right">Log Out</a>
@@ -163,7 +165,7 @@ body {
                     url: "https://csc-394-backend.herokuapp.com/projects/" + pname,
                     type: "DELETE",
                     success: function(msg){
-                        alert("User deleted: " + msg);
+                        alert("Project deleted: " + msg);
                     },
                     error: function(msg){
                         alert(("Unknown project, please enter a valid project"))
