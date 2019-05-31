@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html> 
+    <head>
+        <title>Homepage</title>
+        <link rel="stylesheet" type="text/css" href="homepage.css">
+    </head>
+    <body>
+        <div class="topnav" id="myTopnav">
+            <a href="#classes" class ="active">Home</a>
+            <a href="#grades">Grades</a>
+            <a href="Admin - subprojects.html">Sub-Projects</a>
+            <a href="Admin - projects.html">Projects</a>
+            <a href="login.html" text align="right">Log Out</a>
+        </div>
+        
+        <div id="name"></div>
+        <div id="role"></div>
+        <div id="email"></div>
+        <div id="projects"></div>
+
+        <script>
+            const aarr = window.location.href.split('/');
+            const user = aarr[aarr.length -1];
+            let v;
+            let username;
+            let email;
+            let first_name;
+            let last_name;
+    
+            const url = "https://csc-394-backend.herokuapp.com/users/";
+            const xhr = new XMLHttpRequest;
+            xhr.responseType = 'json';
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    for (let i=0; i < xhr.response.length; i++) {
+                        if (xhr.response[i].username == user) {
+                            v = xhr.response[i];
+                            username = v.username;
+                            auth_level = v.auth_level.toString();
+                            if (auth_level == 'user') {
+                                auth_level = 'Student'
+                            } else {
+                                auth_level = auth_level.charAt(0).toUpperCase() + auth_level.slice(1);
+                            }
+                            email = v.email;
+                            first_name = v.first_name.charAt(0).toUpperCase() + v.first_name.slice(1);
+                            last_name = v.last_name.charAt(0).toUpperCase() + v.last_name.slice(1);
+                            document.getElementById("name").innerHTML = `<h1>Welcome ${first_name} ${last_name}! Below is your basic info:</h1>`;
+                            document.getElementById("role").innerHTML = `<h2>Role: ${auth_level}</h2>`;
+                            document.getElementById("email").innerHTML = `<h2>Email: ${email}</h2>`;
+                        }
+                    }
+                }
+            }
+            xhr.open('GET', url);
+            xhr.send()
+        
+            let v2;
+            const url2 = "https://csc-394-backend.herokuapp.com/projectRoster/";
+            const xhr2 = new XMLHttpRequest;
+            let p;
+            xhr2.responseType = 'json';
+            xhr2.onreadystatechange = () => {
+                if (xhr2.readyState === XMLHttpRequest.DONE) {
+                    for (let i=0; i < xhr2.response.length; i++) {
+                        if (xhr2.response[i].projectRoster.student == user) {
+                            v2 = xhr2.response[i];
+                            p = v2.projectRoster.project;
+                        }
+                    }
+                }
+            }
+            xhr2.open('GET', url2);
+            xhr2.send()
+
+            let v3;
+            const url3 = "https://csc-394-backend.herokuapp.com/projects/";
+            const xhr3 = new XMLHttpRequest;
+            xhr3.responseType = 'json';
+            xhr3.onreadystatechange = () => {
+                if (xhr3.readyState === XMLHttpRequest.DONE) {
+                    for (let i=0; i < xhr3.response.length; i++) {
+                        if (xhr3.response[i].pid === p) {
+                            v3 = xhr3.response[i];
+                            document.getElementById("projects").innerHTML = `<h2>Projects: ${v3.pname} (Status is ${v3.status})</h2>`;
+                            
+                        }
+                    }
+                    console.log(xhr3.response[0]);
+                }
+            }
+            xhr3.open('GET', url3);
+            xhr3.send()
+        </script>
+    </body>
+</html>
