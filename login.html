@@ -1,101 +1,103 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {font-family: Arial, Helvetica, sans-serif;}
-form {border: 3px solid black;}
 
-input[type=text], input[type=password] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
+    <!––Title of the Page and link to style sheet-->
+    <head>
+        <title>ProjectsUnited Login Page</title>
+        <link rel="stylesheet" type="text/css" href="login.css">
+    </head>
 
-button {
-  background-color: blue;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-}
+    <!––toDo Add comments to this code-->
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>Welcome to ProjectsUnited</h1>
+            </div>
+            <form name="login" onsubmit="validate()" method="post">
+                <u1>
+                    <li>Username: <input class="username" type="text" name="username" required></li>
+                    <li>Password: <input class="password" type="password" name="password" required></li>
+                </u1>
+                <input type="button" class="submit" value="Login" name="submit" onclick="validate()">
+            </form>
+        </div>
 
-button:hover {
-  opacity: 0.8;
-}
-
-.cancelbtn {
-  width: auto;
-  padding: 10px 18px;
-  background-color: red;
-}
-
-.imgcontainer {
-  text-align: center;
-  margin: 24px 0 24px 0;
-}
-
-img.avatar {
-  width: 30%;
-  border-radius: 0%;
-}
-
-.container {
-  padding: 16px;
-}
-
-span.psw {
-  float: right;
-  padding-top: 16px;
-}
-
-/* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
-  span.psw {
-     display: block;
-     float: none;
-  }
-  .cancelbtn {
-     width: 100%;
-  }
-}
-</style>
-</head>
-<body>
-
-<h2>Welcome to ProjectsUnited</h2>
-
-<form action="/action_page.php">
-  <div class="imgcontainer">
-    <img src="file:///Users/Miles/Downloads/BeFunky-photo.jpg" alt="Avatar" class="avatar">
-  </div>
-
-  <div class="container">
-    <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uname" required>
-
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
+        <script>
+        let count=0; // number of times one can attempt to login
+        let user; // unique username
         
-    <button type="submit">Login</button>
-    <label>
-      <input type="checkbox" checked="checked" name="remember"> Remember me
-    </label>
-  </div>
+        /*
+        Occurs when login button clicked. Grabs the user data and checks to see if 
+        username and password match in the database. If so, it brings to the 
+        appropriate page.
+        */
+        function validate() {
+            
+            // This chunk is standard. URL may differ. Make sure to name url(n) and xhr(n) and not same name.
+            const url = "https://csc-394-backend.herokuapp.com/users/";
+            const xhr = new XMLHttpRequest;
+            xhr.responseType = 'json';
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    
+                    let usernameArray = [];
+                    let passwordArray = [];
+                    let authLevelArray = [];
 
-  <div class="container" style="background-color:#f1f1f1">
-    <button type="button" class="cancelbtn">Cancel</button>
-    <span class="psw">Forgot <a href="#">password?</a></span>
-  </div>
-</form>
+                    // for loop will create 3 arrays with all username, password, and auth_level data
+                    for (let i=0; i < xhr.response.length; i++) {
+                        usernameArray.push(xhr.response[i].username);
+                        passwordArray.push(xhr.response[i].password);
+                        authLevelArray.push(xhr.response[i].auth_level);
+                    }
 
-<h3> We make working together easy and efficient! </h3>
-<h4> Contact us by phone at 123-456-7890 or email us at ProjectsUnited@gmail.com</h4>
+                    let un = document.login.username.value; // saves input username
+                    let pw = document.login.password.value; // saves input password
+                    let valid = false; // true if we should go pass the login page
+                    let auth; // authorization level. Tells us which page to go to once logged in
 
-</body>
+                    // checks to see if the entered 
+                    for (let i = 0; i < usernameArray.length; i++) {
+                        if ((un == usernameArray[i]) && (pw == passwordArray[i])) {
+                            valid = true;
+                            auth = authLevelArray[i];
+                            user = usernameArray[i];
+                            break;
+                        }
+                    }
+                    
+                    count++;
+                    if (valid) {
+                        if (auth == 'admin') {
+                            window.location = `Admin - projects.html?/${user}`;
+                        } else if (auth == 'professor') {
+                            window.location = `homepageProf.html?/${user}`;
+                        } else {
+                            window.location = `homepage.html?/${user}`;
+                        }
+                        return false;
+                    }
+                    if (count <= 4) {
+                        alert("You have " + (5 - count) + " attempts left.");
+                    } else {
+                        alert("Incorrect password or username you are now blocked");
+                        document.login.username.value = "You are now Blocked";
+                        document.login.password.value = "Fool you can't see this";
+                        document.login.username.disabled = true;
+                        document.login.password.disabled = true;
+                        return false;
+                    }
+                }
+            }
+            xhr.open('GET', url);
+            xhr.send()
+            
+        }
+        </script>
+
+        <br/><br/>
+        <h2> We make working together easy and efficient! </h2>
+        <h3> Contact us by phone at 123-456-7890 or email us at ProjectsUnited@gmail.com</h3>
+
+    </body>
 </html>
