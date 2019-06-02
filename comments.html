@@ -5,6 +5,21 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
+         table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
 body {
   margin: 0;
   font-family: cursive,Helvetica, sans-serif;
@@ -77,32 +92,32 @@ body {
 </head>
 <body>
     <div class="topnav" id="myTopnav">
-        <a rel="noopener" href="#classes" class="active">Classes</a>
-        <a rel="noopener" href="#notifications">Notifications</a>
-        <a rel="noopener" href="#grades">Grades</a>
+         <a href="#classes">Classes</a>
+        <a href="#notifications">Notifications</a>
+        <a href="#grades">Grades</a>
 
-    <a rel="noopener" href="Admin - projects.html">Projects</a>
-    <a rel="noopener" href="Admin - subprojects.html">Sub Projects</a>
-    <a rel="noopener" href="Admin - assignments.html">Assignments</a>
-    <a rel="noopener" href="users.html">Users</a>
-        <a rel="noopener" href="login.html">Log Out</a>
-
+    <a href="Admin - projects.html">Projects</a>
+    <a href="Admin - subprojects.html">Sub Projects</a>
+    <a href="Admin - assignments.html">Assignments</a>
+        <a href="users.html">Users</a>
+    <a href="comments.html" class ="active">Comments</a>
+        <a href="login.html" text align="right">Log Out</a>
     
         <a href="javascript:void(0);" class="icon" onclick="myFunction()">
             <i class="fa fa-bars"></i>
         </a>
     </div>
     <div class="topnav b">
-        <h2>Comments</h2>    
+        <h2>View, Edit, and Delete Comments</h2>    
     </div>
     
      <div ng-app="">
          
          <h2>Edit Comment:</h2> 
         <form>CID: <input id = "Cid" type="text" ng-model="cid">
-            Author: <input id = "AUTHOR" type="text" ng-model="authos">
             Status: <input id = "STATUS" type="text" ng-model="status">
             Body: <input id = "BODY" type="text" ng-model="body">
+            Author: <input id = "AUTHOR" type="text" ng-model="authos">
         </form>
          <p id = "url"></p>
         <input type="submit" onclick="editComment()" value = "Edit">
@@ -113,13 +128,19 @@ body {
     
      <script>
         function editComment(){
-            var CID= document.getElementById("Cid").value;
+            var CID= parseInt(document.getElementById("Cid").value);
             var author = document.getElementById("AUTHOR").value;
             var status = document.getElementById("STATUS").value;
             var body = document.getElementById("BODY").value;
-            var jsonObj = '{"author":' + '"' + author + '"' + ','+
+            var timestamp;
+            
+            $.getJSON('https://csc-394-backend.herokuapp.com/comments/' + CID, function(data) {
+                timestamp = `${data.timestamp}`;
+                 var jsonObj = '{"cid":' + CID  + ','+
                 '"status":' + '"' + status + '"' + ','+
-                '"body":' + '"' + body + '"' +'}';
+                '"body":' + '"' + body + '"' + ','+
+                '"timestamp":' + '"' + timestamp + '"' + ',' +
+                '"author":' + '"' + author + '"' +'}';
             $.ajax({
                 url: "https://csc-394-backend.herokuapp.com/comments/" + CID,
                 contentType: "application/json",
@@ -132,7 +153,9 @@ body {
                     alert("user not found, please enter a valid username");
                 }
             });
-            document.getElementById("url").innerHTML = "https://csc-394-backend.herokuapp.com/comments/" + CID;
+                document.getElementById("url").innerHTML = jsonObj;
+            });
+           
         }
     </script>
     
@@ -156,46 +179,20 @@ body {
     <script>
         $.getJSON('https://csc-394-backend.herokuapp.com/comments/', function(data) {
             var jsonObjs = JSON.stringify(data);
-            var jsonArray = jsonObjs.split();
-            var str = "";
-            for(var i = 0; i<jsonArray.length; i++){
-                str += jsonArray[i] + '\n';
+            var list = "";
+            var table = '<table><tr><th>CID</th><th>Status</th><th>Body</th><th>Timestamp</th><th>Author</th></tr>';
+            for(i in data){
+                /* list +='<b>Username:</b> ' + data[i].username + ', <b>Email:</b> ' + data[i].email + ', <b>First Name:</b> ' + data[i].first_name+', <b>Last Name:</b> ' + data[i].last_name + 
+                     ', <b>Authentication Level:</b> ' +data[i].auth_level +'<br>'; */
+                list += "<tr><td>" + data[i].cid + "</td><td>" + data[i].status +
+                    "</td><td>" + data[i].body + "</td><td>" + data[i].timestamp +
+                    "</td><td>" + data[i].author + "</td></tr>";
+                
+            //console.log(data[i].username +" "+ data[i].first_name);
             }
-            document.getElementById("allComments").innerHTML = str;
+            document.getElementById("allComments").innerHTML = table + list + "</table>";
         });
     </script>
-    <br>
-   <!-- <div align="center">
-    <form id="usrform">
-        Username: <input type="text" id = "username" name="usrname">
-    </form>
-    <br>
-comment
-    <br><textarea rows="4" id = "comment" cols="50" name="comment" form="usrform" >
-    </textarea>
-        <br>
-    <input type="submit" onclick="addComment()">
-    </div> -->
-    <script>
-        function addComment(){
-            var CID = Math.floor(Math.random() * 100);
-            var USERNAME = document.getElementById("username").value;
-            var COMMENT = document.getElementById("comment").value;
-            var status = "thumbs up";
-            var jsonObj = '{"CID":' + '"' + CID + '"' + ','+
-                '"AUTHOR":' + '"' + USERNAME + '"' + ','+
-                '"STATUS":' + '"' + status + '"' + ',' +
-                '"BODY":' + '"' + COMMENT + '"' + '}';
-             $.ajax({
-                url: "https://csc-394-backend.herokuapp.com/comments/",
-                datatype: "json",
-                contentType: "application/json",
-                type: "POST",
-                data: JSON.stringify(jsonObj),
-            });
-
-        }
-    </script>
-    
+    <br>    
 </body>
 </html>
