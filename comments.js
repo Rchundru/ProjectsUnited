@@ -30,6 +30,20 @@ function editComment(){
 
        }
 
+       function deleteComment(){
+            var cid = document.getElementById("CID").value;
+                $.ajax({
+                    url: "https://csc-394-backend.herokuapp.com/comments/" + cid,
+                    type: "DELETE",
+                    success: function(msg){
+                        alert("Comment deleted: " + msg);
+                    },
+                    error: function(msg){
+                        alert(("Unknown comment, please enter a valid CID"))
+                    }
+                });
+        }
+
         $.getJSON('https://csc-394-backend.herokuapp.com/comments/', function(data) {
             var jsonObjs = JSON.stringify(data);
             var list = "";
