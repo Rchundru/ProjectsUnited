@@ -4,24 +4,96 @@
         <title>Homepage</title>
         <link rel="stylesheet" type="text/css" href="homepage.css">
     </head>
+   
     <body>
+        
+        <!–-Top navigation-->
         <div class="topnav" id="myTopnav">
-            <a href="#classes" class ="active">Home</a>
-            <a href="#grades">Grades</a>
-            <a href="Admin - subprojects.html">Sub-Projects</a>
-            <a href="Admin - projects.html">Projects</a>
-            <a href="login.html" text align="right">Log Out</a>
+            <a class ="active" id='home'>Home</a>
+            <a id ='project'>Projects</a>
+            <a id='grades'>Grades</a>
+            <a id='sub-projects'>Sub-Projects</a>
+            <a href="login.html">Log Out</a>
         </div>
         
-        <div id="name"></div>
-        <div id="role"></div>
-        <div id="email"></div>
-        <div id="projects"></div>
+        <!–-Main body-->
+        <div id="info"></div>
+        <div id='email'></div>
+        <p> <input type='text' id='email'> </p>
+        <button id='input'> here </button>
 
+        <!–-Start of jquery-->
+        <script src = jquery-3.4.1.js></script>
+        <script src = mustache.js></script>
         <script>
+        $(document).ready(function() {  
             const aarr = window.location.href.split('/');
             const user = aarr[aarr.length -1];
-            let v;
+
+            // Top Bar Navigation
+            $('#project').on('click', function() {
+                window.location = `projects.html?/${user}`;
+            })
+
+            $.ajax({
+                    // GET the user data
+                    type: 'GET',
+                    url: 'https://csc-394-backend.herokuapp.com/users/',
+                    success: function(people) {
+                        $.each(people, function(i, person) {
+                            if (user === person.username) {
+                                const fname = person.first_name.charAt(0).toUpperCase() + person.first_name.slice(1);
+                                const lname = person.last_name.charAt(0).toUpperCase() + person.last_name.slice(1);
+                                $('#info').append(Mustache.render('<h1>Welcome {{fname}} {{lname}}</h1>', {'fname': fname, 'lname': lname}));
+                                const auth = person.auth_level.charAt(0).toUpperCase() + person.auth_level.slice(1);
+                                $('#info').append(Mustache.render('<h2>Authorization Level: {{auth}}</h2>', {'auth':auth}));
+                                $('#info').append(Mustache.render('<h2>Email: {{email}} <button>Edit</button> </h2>', person));
+
+                                // username saved in user
+                                const email = person.email;
+                                const password = person.password;
+                                const first_name = person.first_name;
+                                const last_name = person.last_name;
+                                const auth_level = person.auth_level;
+                            }
+                        })
+
+                        // Edit email
+                        let count = 0;
+                        // Looks at the Edit button
+                        $('#info').children().eq(2).children().on('click', function() {
+                            count++;
+                            if (count <= 1) {
+                            
+                            // Brings in an input box and add button as 4th element of id=info
+                            $('#info').append(Mustache.render("<p>New Email: <input type='text' id='email'> <button>Add</button> </p>"));
+                            }
+                            
+                            // When the add button is clicked
+                            $('#info').children().eq(3).children().eq(1).on('click', function() {
+                                const newEmail = $('#info').children().eq(3).children().eq(0).val();
+                                
+                                $.ajax({
+                                    type: 'PUT',
+                                    url: 'https://csc-394-backend.herokuapp.com/users/ggk',
+                                    contentType: "application/json",
+                                    data: JSON.stringify(newProject),
+                                    success: function(people){
+                                        
+                                    }
+                                })
+                            })
+                            
+                        })
+                        
+                        $('#input').on('click', function() {
+                            console.log($('input').val());
+                            //console.log($('input').value());
+                        })
+                    }
+                })
+            
+            /*let v;
             let username;
             let email;
             let first_name;
@@ -91,6 +163,21 @@
             }
             xhr3.open('GET', url3);
             xhr3.send()
+
+
+        })
+            const xhr = new XMLHttpRequest;
+            const url = 'https://api-to-call.com/endpoint';
+            const data = JSON.stringify({id: '200'});
+xhr.responseType = 'json';
+xhr.onreadystatechange = () => {
+  if (xhr.readyState === XMLHttpRequest.DONE) {
+    return xhr.response;
+  }
+}
+xhr.open('POST', url);
+xhr.send(data);*/
+        })
         </script>
     </body>
 </html>
