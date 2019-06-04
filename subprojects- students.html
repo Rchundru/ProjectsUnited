@@ -288,8 +288,24 @@ function myFunction() {
 
     <script>
         $.getJSON('https://csc-394-backend.herokuapp.com/subprojects/', function(data) {
-            var jsonObjs = JSON.stringify(data);
+                    var jsonObjs = JSON.stringify(data);
             document.getElementById("subprojectsList").innerHTML = jsonObjs;
+			
+			 console.log(data);
+		  var subprojectsNames=[];
+		  
+		  var i;
+		  
+		  var res = "";
+		  res=res+"<ul>";
+		  for(i=0; i < data.length; i++) {
+		  
+		  res=res+"<li>"+data[i].sname+"</li>";
+		  }
+			res=res+"</ul>"
+            document.getElementById("subprojectsList").innerHTML =res;// jsonObjs;
+			
+       
         });
     </script>
 

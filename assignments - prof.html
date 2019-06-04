@@ -224,6 +224,7 @@ body {
                 }
             })
             $.getJSON('https://csc-394-backend.herokuapp.com/assignments/', function(data) {
+				console.log(data);
                 var jsonObjs = JSON.stringify(data);
                 document.getElementById("assignmentsList").innerHTML = jsonObjs;
             });
@@ -291,11 +292,25 @@ function myFunction() {
     <script>	
 	
 	      $.getJSON('https://csc-394-backend.herokuapp.com/assignments/', function(data) {
-            var jsonObjs = JSON.stringify(data);
-            document.getElementById("assignmentsList").innerHTML = jsonObjs;
+		  console.log(data);
+		  var assignmentNames=[];
+		  
+		  var i;
+		 
+		  var res = "";
+		  res=res+"<ul>";
+		  for(i=0; i < data.length; i++) {
+		  
+		  res=res+"<li>"+data[i].aname+"</li>";
+		  }
+			res=res+"</ul>"
+            document.getElementById("assignmentsList").innerHTML =res;// jsonObjs;
+			
         });
   
     </script>
+	
+	
 
 
 

@@ -224,11 +224,26 @@ function myFunction() {
     <h2>Assignments:</h2>
      <p id="assignmentsList"></p>
 
-    <script>
-        $.getJSON('https://csc-394-backend.herokuapp.com/assignments/', function(data) {
-            var jsonObjs = JSON.stringify(data);
-            document.getElementById("assignmentsList").innerHTML = jsonObjs;
+    <script>	
+	
+	      $.getJSON('https://csc-394-backend.herokuapp.com/assignments/', function(data) {
+		  console.log(data);
+		  var assignmentNames=[];
+		  //var assignments = ["Assignment 1", "Assignment 2", "Assignment 3", "Assignment 4"];
+		  var i;
+		  
+		  //use javascript splice to add assignment Names to assignmentNames; use that list 
+		  var res = "";
+		  res=res+"<ul>";
+		  for(i=0; i < data.length; i++) {
+		  
+		  res=res+"<li>"+data[i].aname+"</li>";
+		  }
+			res=res+"</ul>"
+            document.getElementById("assignmentsList").innerHTML =res;// jsonObjs;
+			
         });
+  
     </script>
 
 
