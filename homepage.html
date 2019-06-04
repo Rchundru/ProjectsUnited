@@ -19,8 +19,6 @@
         <!–-Main body-->
         <div id="info"></div>
         <div id='email'></div>
-        <p> <input type='text' id='email'> </p>
-        <button id='input'> here </button>
 
         <!–-Start of jquery-->
         <script src = jquery-3.4.1.js></script>
@@ -29,6 +27,11 @@
         $(document).ready(function() {  
             const aarr = window.location.href.split('/');
             const user = aarr[aarr.length -1];
+            let email;
+            let password;
+            let first_name;
+            let last_name;
+            let auth_level;
 
             // Top Bar Navigation
             $('#project').on('click', function() {
@@ -50,11 +53,11 @@
                                 $('#info').append(Mustache.render('<h2>Email: {{email}} <button>Edit</button> </h2>', person));
 
                                 // username saved in user
-                                const email = person.email;
-                                const password = person.password;
-                                const first_name = person.first_name;
-                                const last_name = person.last_name;
-                                const auth_level = person.auth_level;
+                                email = person.email;
+                                password = person.password;
+                                first_name = person.first_name;
+                                last_name = person.last_name;
+                                auth_level = person.auth_level;
                             }
                         })
 
@@ -72,14 +75,22 @@
                             // When the add button is clicked
                             $('#info').children().eq(3).children().eq(1).on('click', function() {
                                 const newEmail = $('#info').children().eq(3).children().eq(0).val();
-                                
+                                const updatedUser = {
+                                        'username': user,
+                                        'email': newEmail,
+                                        'password': password,
+                                        'first_name': first_name,
+                                        'last_name': last_name,
+                                        'auth_level': auth_level
+                                        };
+
                                 $.ajax({
                                     type: 'PUT',
-                                    url: 'https://csc-394-backend.herokuapp.com/users/ggk',
+                                    url: 'https://csc-394-backend.herokuapp.com/users/' + user,
                                     contentType: "application/json",
-                                    data: JSON.stringify(newProject),
-                                    success: function(people){
-                                        
+                                    data: JSON.stringify(updatedUser),
+                                    success: function(person){
+                                        alert('Your email has been updated.');
                                     }
                                 })
                             })
