@@ -113,6 +113,16 @@ body {
         <h2>View, Add/Edit, and Delete grades</h2>    
     </div>
 
+    <h2>Add Grade:</h2>
+    <div ng-app="">
+
+        <form>Username: <input id = "uNamea" type="text" ng-model="editUsernameA">
+            Assignment: <input id = "ASSIGNMENTA" type="text" ng-model="AssignmentA">
+            Grade: <input id = "GRADEA" type="text" ng-model="gradeA">
+        </form>
+        <input type="submit" onclick="addGrade()" value = "Add">
+    </div>
+        
     <h2>Edit Grade:</h2>
     <div ng-app="">
 
@@ -122,15 +132,8 @@ body {
         </form>
         <input type="submit" onclick="editGrade()" value = "Edit">
         
-            <h2>Add Grade:</h2>
     </div>
     <div ng-app="">
-
-        <form>Username: <input id = "uNamea" type="text" ng-model="editUsernameA">
-            Assignment: <input id = "ASSIGNMENTA" type="text" ng-model="AssignmentA">
-            Grade: <input id = "GRADEA" type="text" ng-model="gradeA">
-        </form>
-        <input type="submit" onclick="addGrade()" value = "Add">
         <h2>Delete Grade:</h2>   
         <form>Username: <input id="uNameD" type="text" ng-model="usernameD" required>
             Assignment: <input id = "ASSIGNMENTD" type="text" ng-model="AssignmentD">
