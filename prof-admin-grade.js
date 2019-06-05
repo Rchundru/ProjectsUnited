@@ -50,29 +50,36 @@ function editGrade(){
       var username = document.getElementById("uNameD").value;
       var assignment = document.getElementById("ASSIGNMENTD").value;
 
-        $.ajax({
-          url: "https://csc-394-backend.herokuapp.com/assignmentRoster/" + username + "/" + assignment,
-          type: "DELETE",
-          success: function(msg){
-            alert("Success");
-          },
-          error: function(msg){
-            alert("user not found, please enter a valid username");
-          }
-        });
-      }
-
-      $.getJSON('https://csc-394-backend.herokuapp.com/assignmentRoster/', function(data) {
-          var jsonObjs = JSON.stringify(data);
-          var list = "";
-          var table = '<table><tr><th>Username</th><th>Assignment</th><th>Grade</th></tr>';
-          for(i in data){
-              /* list +='<b>Username:</b> ' + data[i].username + ', <b>Email:</b> ' + data[i].email + ', <b>First Name:</b> ' + data[i].first_name+', <b>Last Name:</b> ' + data[i].last_name +
-                   ', <b>Authentication Level:</b> ' +data[i].auth_level +'<br>'; */
-              list += "<tr><td>" + data[i].asmtRoster.student + "</td><td>" + data[i].asmtRoster.asmt +
-                  "</td><td>" + data[i].grade + "</td></tr>";
-
-          //console.log(data[i].username +" "+ data[i].first_name);
-          }
-          document.getElementById("allGrades").innerHTML = table + list + "</table>";
+      $.ajax({
+        url: "https://csc-394-backend.herokuapp.com/assignmentRoster/" + username + "/" + assignment,
+        type: "DELETE",
+        success: function(msg){
+          alert("Success");
+        },
+        error: function(msg){
+          alert("user not found, please enter a valid username");
+        }
       });
+    }
+
+
+    $.getJSON('https://csc-394-backend.herokuapp.com/assignmentRoster/', function(data) {
+      var list = "";
+      var table = '<table><tr><th>Username</th><th>First Name</th><th>Last Name</th><th>Assignment</th><th>Grade</th></tr>';
+
+      $.getJSON('https://csc-394-backend.herokuapp.com/users/', function(result) {
+        for(i in data){
+          for(j in result){
+            if(data[i].asmtRoster.student === result[j].username){
+              list += "<tr><td>" + data[i].asmtRoster.student +
+              "</td><td>" + result[j].first_name +
+              "</td><td>" + result[j].last_name +
+              "</td><td>" + data[i].asmtRoster.asmt +
+              "</td><td>" + data[i].grade + "</td></tr>";
+            }
+          }
+        }
+        document.getElementById("allGrades").innerHTML = table + list + "</table>";
+      });
+
+    });
