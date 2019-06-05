@@ -10,9 +10,7 @@
         <!–-Top navigation-->
         <div class="topnav" id="myTopnav">
             <a class ="active" id='home'>Home</a>
-            <a id ='project'>Projects</a>
-            <a id='grades'>Grades</a>
-            <a id='sub-projects'>Sub-Projects</a>
+            <a id ='projects'>Projects</a>
             <a href="login.html">Log Out</a>
         </div>
         
@@ -20,6 +18,7 @@
         <div id="info"></div>
         <div id="first"></div>
         <div id="last"></div>
+        <div id="pass"></div>
 
         <!–-Start of jquery-->
         <script src = jquery-3.4.1.js></script>
@@ -27,6 +26,7 @@
         <script>
         $(document).ready(function() {  
             const aarr = window.location.href.split('/');
+            
             const user = aarr[aarr.length -1];
             let email;
             let password;
@@ -34,11 +34,15 @@
             let lname;
             let first_name;
             let last_name;
-            let auth_level;
+            const auth_level = aarr[aarr.length-2];
         
             // Top Bar Navigation
-            $('#project').on('click', function() {
-                window.location = `projects.html?/${user}`;
+            $('#projects').on('click', function() {
+                if (auth_level == 'professor') {
+                    window.location = `projectsProf.html?/${user}`;
+                } else {
+                    window.location = `projects.html?/${user}`;
+                }
             })
                 $.ajax({
                     // GET the user data
@@ -51,7 +55,7 @@
                                 lname = person.last_name.charAt(0).toUpperCase() + person.last_name.slice(1);
                                 $('#info').append(Mustache.render('<h1>Welcome {{fname}} {{lname}}</h1>', {'fname': fname, 'lname': lname}));
                                 const auth = person.auth_level.charAt(0).toUpperCase() + person.auth_level.slice(1);
-                                $('#info').append(Mustache.render('<h2>Authorization Level: {{auth}}</h2>', {'auth':auth}));
+                                $('#info').append(`<h2>Authorization Level: ${auth_level}</h2>`);
                                 $('#info').append(Mustache.render('<h2>Email: {{email}} <button>Edit</button> </h2>', person));
 
                                 // username saved in user
@@ -59,7 +63,6 @@
                                 password = person.password;
                                 first_name = person.first_name;
                                 last_name = person.last_name;
-                                auth_level = person.auth_level;
                             }
                         })
 
@@ -93,21 +96,23 @@
                                     data: JSON.stringify(updatedUser),
                                     success: function(person){
                                         alert('Your email has been updated.');
-                                        window.location = `homepage.html?/${user}`;
+                                        window.location = `homepage.html?/${auth_level}/${user}`;
                                     }
                                 })
                             })
                         })
 
-                        // Into the first ID is an h2 with child button
+                        // FIRST ID is an h2 with child button
                         $('#first').append(Mustache.render(`<h2> First Name: {{f}}<button> Edit </button> </h2>`, {'f':fname}));
                         
                         // When edit button is clicked
                         $('#first').children().children().on('click', function() {
-                            
-                            // Bring input box with button
-                            $('#first').append(Mustache.render("<p>New First Name: <input type='text'> <button>Add</button> </p>"));
-                            
+                            count++;
+                            if (count <= 1) {
+                                // Bring input box with button
+                                $('#first').append(Mustache.render("<p>New First Name: <input type='text'> <button>Add</button> </p>"));
+                            }
+
                             // When the add button is clicked
                             $('#first').children().children().eq(2).on('click', function() {
                                 const newFname = $('#first').children().children().eq(1).val();
@@ -127,21 +132,23 @@
                                     data: JSON.stringify(updatedUser),
                                     success: function(person){
                                         alert('Your first name has been updated.');
-                                        window.location = `homepage.html?/${user}`;
+                                        window.location = `homepage.html?/${auth_level}/${user}`;
                                     }
                                 })
                             })
                         })
 
-                        // Into the first ID is an h2 with child button
+                        // LAST ID is an h2 with child button
                         $('#last').append(Mustache.render(`<h2> Last Name: {{l}}<button> Edit </button> </h2>`, {'l':lname}));
                         
                         // When edit button is clicked
                         $('#last').children().children().on('click', function() {
-                            
-                            // Bring input box with button
-                            $('#last').append(Mustache.render("<p>New Last Name: <input type='text'> <button>Add</button> </p>"));
-                            
+                            count++;
+                            if (count <= 1) {
+                                // Bring input box with button
+                                $('#last').append(Mustache.render("<p>New Last Name: <input type='text'> <button>Add</button> </p>"));
+                            }
+
                             // When the add button is clicked
                             $('#last').children().children().eq(2).on('click', function() {
                                 const newLname = $('#last').children().children().eq(1).val();
@@ -161,9 +168,46 @@
                                     data: JSON.stringify(updatedUser),
                                     success: function(person){
                                         alert('Your last name has been updated.');
-                                        window.location = `homepage.html?/${user}`;
+                                        window.location = `homepage.html?/${auth_level}/${user}`;
                                     }
                                 })
+                            })
+                        })
+
+                        // PASS ID is an h2 with child button
+                        $('#pass').append(Mustache.render(`<h2> Password: {{p}}<button> Edit </button> </h2>`, {'p':password}));
+                        
+                        // When edit button is clicked
+                        $('#pass').children().children().on('click', function() {
+                            count++;
+                            if (count <= 1) {
+                                // Bring input box with button
+                                $('#pass').append(Mustache.render("<p>New Password: <input type='text'> <button>Add</button> </p>"));
+                            }
+
+                            // When the add button is clicked
+                            $('#pass').children().children().eq(2).on('click', function() {
+                                const newPassword = $('#pass').children().children().eq(1).val();
+                                const updatedUser = {
+                                        'username': user,
+                                        'email': email,
+                                        'password': newPassword,
+                                        'first_name': first_name,
+                                        'last_name': last_name,
+                                        'auth_level': auth_level
+                                        };
+                                
+                                $.ajax({
+                                    type: 'PUT',
+                                    url: 'https://csc-394-backend.herokuapp.com/users/' + user,
+                                    contentType: "application/json",
+                                    data: JSON.stringify(updatedUser),
+                                    success: function(person){
+                                        alert('Your password has been updated.');
+                                        window.location = `homepage.html?/${auth_level}/${user}`;
+                                    }
+                                })
+                                
                             })
                         })
                     }

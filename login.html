@@ -69,11 +69,11 @@
                     count++;
                     if (valid) {
                         if (auth == 'admin') {
-                            window.location = `Admin - projects.html?/${user}`;
+                            window.location = `Admin - projects.html?/admin/${user}`;
                         } else if (auth == 'professor') {
-                            window.location = `homepageProf.html?/${user}`;
+                            window.location = `homepage.html?/professor/${user}`;
                         } else {
-                            window.location = `homepage.html?/${user}`;
+                            window.location = `homepage.html?/user/${user}`;
                         }
                         return false;
                     }
