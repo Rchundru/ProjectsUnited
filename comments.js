@@ -7,6 +7,15 @@ function editComment(){
 
   $.getJSON('https://csc-394-backend.herokuapp.com/comments/' + CID, function(data) {
     timestamp = `${data.timestamp}`;
+    if(status === undefined || status === ""){
+      status = `${data.status}`;
+    }
+    if(body === undefined || body === ""){
+      body = `${data.body}`;
+    }
+    if(author === undefined || author === ""){
+      author = `${data.author}`;
+    }
     var jsonObj = {
       "cid":CID ,
       "status":status,
