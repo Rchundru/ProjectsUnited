@@ -1,33 +1,45 @@
 function editUser(){
   var username= document.getElementById("uName").value;
   var email = document.getElementById("EMAIL").value;
-  var password;
+  var password = "";
   var firstname = document.getElementById("FIRSTNAME").value;
   var lastname = document.getElementById("LASTNAME").value;
   var authlvl = document.getElementById("AUTHLVL").value;
+  var jsonObj = '';
 
   $.getJSON('https://csc-394-backend.herokuapp.com/users/' + username, function(data) {
     password = `${data.password}`;
-  });
-
-  var jsonObj = '{"username":' + '"' + username + '"' + ','+
-  '"email":' + '"' + email + '"' + ','+
-  '"password":' + '"' + password + '"' + ',' +
-  '"first_name":' + '"' + firstname + '"' + ',' +
-  '"last_name":' + '"' + lastname + '"' + ',' +
-  '"auth_level":' + '"' + authlvl + '"' +'}';
-
-  $.ajax({
-    url: "https://csc-394-backend.herokuapp.com/users/" + username,
-    contentType: "application/json",
-    type: "PUT",
-    data: JSON.stringify(jsonObj),
-    success: function(msg){
-      alert("Success");
-    },
-    error: function(msg){
-      alert("user not found, please enter a valid username");
+    if(email === undefined || email === ""){
+      email = `${data.email}`;
     }
+    if(firstname === undefined || firstname === ""){
+      firstname = `${data.first_name}`;
+    }
+    if(lastname === undefined || lastname === ""){
+      lastname = `${data.last_name}`;
+    }
+    if(authlvl === undefined || authlvl === ""){
+      authlvl = `${data.auth_level}`;
+    }
+    jsonObj = '{"username":' + '"' + username + '"' + ','+
+    '"email":' + '"' + email + '"' + ','+
+    '"password":' + '"' + password + '"' + ',' +
+    '"first_name":' + '"' + firstname + '"' + ',' +
+    '"last_name":' + '"' + lastname + '"' + ',' +
+    '"auth_level":' + '"' + authlvl + '"' +'}';
+
+    $.ajax({
+      url: "https://csc-394-backend.herokuapp.com/users/" + username,
+      contentType: "application/json",
+      type: "PUT",
+      data: JSON.stringify(jsonObj),
+      success: function(msg){
+        alert("Success");
+      },
+      error: function(msg){
+        alert("user not found, please enter a valid username");
+      }
+    });
   });
 
   $.getJSON('https://csc-394-backend.herokuapp.com/users/', function(data) {
