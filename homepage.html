@@ -18,7 +18,8 @@
         
         <!–-Main body-->
         <div id="info"></div>
-        <div id='email'></div>
+        <div id="first"></div>
+        <div id="last"></div>
 
         <!–-Start of jquery-->
         <script src = jquery-3.4.1.js></script>
@@ -29,24 +30,25 @@
             const user = aarr[aarr.length -1];
             let email;
             let password;
+            let fname;
+            let lname;
             let first_name;
             let last_name;
             let auth_level;
-
+        
             // Top Bar Navigation
             $('#project').on('click', function() {
                 window.location = `projects.html?/${user}`;
             })
-
-            $.ajax({
+                $.ajax({
                     // GET the user data
                     type: 'GET',
                     url: 'https://csc-394-backend.herokuapp.com/users/',
                     success: function(people) {
                         $.each(people, function(i, person) {
                             if (user === person.username) {
-                                const fname = person.first_name.charAt(0).toUpperCase() + person.first_name.slice(1);
-                                const lname = person.last_name.charAt(0).toUpperCase() + person.last_name.slice(1);
+                                fname = person.first_name.charAt(0).toUpperCase() + person.first_name.slice(1);
+                                lname = person.last_name.charAt(0).toUpperCase() + person.last_name.slice(1);
                                 $('#info').append(Mustache.render('<h1>Welcome {{fname}} {{lname}}</h1>', {'fname': fname, 'lname': lname}));
                                 const auth = person.auth_level.charAt(0).toUpperCase() + person.auth_level.slice(1);
                                 $('#info').append(Mustache.render('<h2>Authorization Level: {{auth}}</h2>', {'auth':auth}));
@@ -91,103 +93,81 @@
                                     data: JSON.stringify(updatedUser),
                                     success: function(person){
                                         alert('Your email has been updated.');
+                                        window.location = `homepage.html?/${user}`;
                                     }
                                 })
                             })
-                            
                         })
+
+                        // Into the first ID is an h2 with child button
+                        $('#first').append(Mustache.render(`<h2> First Name: {{f}}<button> Edit </button> </h2>`, {'f':fname}));
                         
-                        $('#input').on('click', function() {
-                            console.log($('input').val());
-                            //console.log($('input').value());
+                        // When edit button is clicked
+                        $('#first').children().children().on('click', function() {
+                            
+                            // Bring input box with button
+                            $('#first').append(Mustache.render("<p>New First Name: <input type='text'> <button>Add</button> </p>"));
+                            
+                            // When the add button is clicked
+                            $('#first').children().children().eq(2).on('click', function() {
+                                const newFname = $('#first').children().children().eq(1).val();
+                                const updatedUser = {
+                                        'username': user,
+                                        'email': email,
+                                        'password': password,
+                                        'first_name': newFname,
+                                        'last_name': last_name,
+                                        'auth_level': auth_level
+                                        };
+
+                                $.ajax({
+                                    type: 'PUT',
+                                    url: 'https://csc-394-backend.herokuapp.com/users/' + user,
+                                    contentType: "application/json",
+                                    data: JSON.stringify(updatedUser),
+                                    success: function(person){
+                                        alert('Your first name has been updated.');
+                                        window.location = `homepage.html?/${user}`;
+                                    }
+                                })
+                            })
+                        })
+
+                        // Into the first ID is an h2 with child button
+                        $('#last').append(Mustache.render(`<h2> Last Name: {{l}}<button> Edit </button> </h2>`, {'l':lname}));
+                        
+                        // When edit button is clicked
+                        $('#last').children().children().on('click', function() {
+                            
+                            // Bring input box with button
+                            $('#last').append(Mustache.render("<p>New Last Name: <input type='text'> <button>Add</button> </p>"));
+                            
+                            // When the add button is clicked
+                            $('#last').children().children().eq(2).on('click', function() {
+                                const newLname = $('#last').children().children().eq(1).val();
+                                const updatedUser = {
+                                        'username': user,
+                                        'email': email,
+                                        'password': password,
+                                        'first_name': first_name,
+                                        'last_name': newLname,
+                                        'auth_level': auth_level
+                                        };
+
+                                $.ajax({
+                                    type: 'PUT',
+                                    url: 'https://csc-394-backend.herokuapp.com/users/' + user,
+                                    contentType: "application/json",
+                                    data: JSON.stringify(updatedUser),
+                                    success: function(person){
+                                        alert('Your last name has been updated.');
+                                        window.location = `homepage.html?/${user}`;
+                                    }
+                                })
+                            })
                         })
                     }
                 })
-            
-            /*let v;
-            let username;
-            let email;
-            let first_name;
-            let last_name;
-    
-            const url = "https://csc-394-backend.herokuapp.com/users/";
-            const xhr = new XMLHttpRequest;
-            xhr.responseType = 'json';
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    for (let i=0; i < xhr.response.length; i++) {
-                        if (xhr.response[i].username == user) {
-                            v = xhr.response[i];
-                            username = v.username;
-                            auth_level = v.auth_level.toString();
-                            if (auth_level == 'user') {
-                                auth_level = 'Student'
-                            } else {
-                                auth_level = auth_level.charAt(0).toUpperCase() + auth_level.slice(1);
-                            }
-                            email = v.email;
-                            first_name = v.first_name.charAt(0).toUpperCase() + v.first_name.slice(1);
-                            last_name = v.last_name.charAt(0).toUpperCase() + v.last_name.slice(1);
-                            document.getElementById("name").innerHTML = `<h1>Welcome ${first_name} ${last_name}! Below is your basic info:</h1>`;
-                            document.getElementById("role").innerHTML = `<h2>Role: ${auth_level}</h2>`;
-                            document.getElementById("email").innerHTML = `<h2>Email: ${email}</h2>`;
-                        }
-                    }
-                }
-            }
-            xhr.open('GET', url);
-            xhr.send()
-        
-            let v2;
-            const url2 = "https://csc-394-backend.herokuapp.com/projectRoster/";
-            const xhr2 = new XMLHttpRequest;
-            let p;
-            xhr2.responseType = 'json';
-            xhr2.onreadystatechange = () => {
-                if (xhr2.readyState === XMLHttpRequest.DONE) {
-                    for (let i=0; i < xhr2.response.length; i++) {
-                        if (xhr2.response[i].projectRoster.student == user) {
-                            v2 = xhr2.response[i];
-                            p = v2.projectRoster.project;
-                        }
-                    }
-                }
-            }
-            xhr2.open('GET', url2);
-            xhr2.send()
-
-            let v3;
-            const url3 = "https://csc-394-backend.herokuapp.com/projects/";
-            const xhr3 = new XMLHttpRequest;
-            xhr3.responseType = 'json';
-            xhr3.onreadystatechange = () => {
-                if (xhr3.readyState === XMLHttpRequest.DONE) {
-                    for (let i=0; i < xhr3.response.length; i++) {
-                        if (xhr3.response[i].pid === p) {
-                            v3 = xhr3.response[i];
-                            document.getElementById("projects").innerHTML = `<h2>Projects: ${v3.pname} (Status is ${v3.status})</h2>`;
-                            
-                        }
-                    }
-                    console.log(xhr3.response[0]);
-                }
-            }
-            xhr3.open('GET', url3);
-            xhr3.send()
-
-
-        })
-            const xhr = new XMLHttpRequest;
-            const url = 'https://api-to-call.com/endpoint';
-            const data = JSON.stringify({id: '200'});
-xhr.responseType = 'json';
-xhr.onreadystatechange = () => {
-  if (xhr.readyState === XMLHttpRequest.DONE) {
-    return xhr.response;
-  }
-}
-xhr.open('POST', url);
-xhr.send(data);*/
         })
         </script>
     </body>
