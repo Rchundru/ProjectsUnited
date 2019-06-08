@@ -1,0 +1,68 @@
+function editAssignment(){
+
+  var assignmentid= document.getElementById("AID").value;
+  var owner = document.getElementById("OWNER").value;
+  var aname = document.getElementById("ANAME").value;
+  var project = document.getElementById("PRO").value;
+
+  $.getJSON("https://csc-394-backend.herokuapp.com/assignments/" + assignmentid, function(data) {
+    if(owner === undefined || owner === ""){
+      owner = `${data.owner}`
+    }
+    if(aname === undefined || aname === ""){
+      aname = `${data.aname}`
+    }
+    if(project === undefined || project === ""){
+      project = `${data.parent}`
+    }
+    var jsonObj = {
+      "aid":assignmentid,
+      "owner":owner,
+      "aname":aname,
+      "parent":project};
+
+      $.ajax({
+        url: "https://csc-394-backend.herokuapp.com/assignments/" + assignmentid,
+        contentType: "application/json",
+        type: "PUT",
+        data: JSON.stringify(jsonObj),
+        success: function(msg){
+          alert("Success");
+        },
+        error: function(msg){
+          alert("Assignment not found, please enter a valid assignment name.");
+        }
+      });
+    });
+  }
+
+  function deletePro(){
+    var aid= document.getElementById("AIDD").value;
+    $.ajax({
+      url: "https://csc-394-backend.herokuapp.com/assignments/" + aid,
+      type: "DELETE",
+      success: function(msg){
+        alert("Assignment deleted");
+      },
+      error: function(msg){
+        alert(("Unknown Assignment, please enter a valid Assignment"))
+      }
+    });
+    var url = "https://csc-394-backend.herokuapp.com/assignments/" + aname;
+    document.getElementById("url").innerHTML = url;
+    $.getJSON('https://csc-394-backend.herokuapp.com/assignments/', function(data) {
+      var jsonObjs = JSON.stringify(data);
+      document.getElementById("assignmentsList").innerHTML = jsonObjs;
+    });
+  }
+
+  $.getJSON('https://csc-394-backend.herokuapp.com/assignments/', function(data) {
+    var jsonObjs = JSON.stringify(data);
+    var list = "";
+    var table = '<table><tr><th>AID</th><th>A Name</th><th>Owner</th><th>Parent</th></tr>';
+    for(i in data){
+      list += "<tr><td>" + data[i].aid + "</td><td>" + data[i].aname +
+      "</td><td>" + data[i].owner + "</td><td>" + data[i].parent +"</td></tr>";
+    }
+    document.getElementById("assignmentsList").innerHTML = table+ list + "</table>";
+  });
