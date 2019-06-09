@@ -90,3 +90,48 @@ $.getJSON('https://csc-394-backend.herokuapp.com/users/', function(data) {
 
   document.getElementById("userList").innerHTML = table+ list + "</table>";
 });
+$(document).ready(function() {
+    const aarr = window.location.href.split('/');
+
+    const user = aarr[aarr.length -1];
+
+    const auth_level = aarr[aarr.length-2];
+
+    // Top Bar Navigation
+    $('#home').on('click', function() {
+
+            window.location = `adminHomepage.html?/${user}`;
+    })
+    $('#agrades').on('click', function() {
+
+                window.location = `prof-admin-aGrades.html?/${user}`;
+        })
+        $('#pgrades').on('click', function() {
+
+                window.location = `prof-admin-projectGrades.html?/${user}`;
+        })
+        $('#rosters').on('click', function() {
+
+                window.location = `admin%20-%20Rosters.html?/${user}`;
+        })
+        $('#projects').on('click', function() {
+
+                window.location = `Admin-projects.html?/${user}`;
+        })
+        $('#sprojects').on('click', function() {
+
+                window.location = `admin%20-%20subprojects.html?/${user}`;
+        })
+        $('#assignments').on('click', function() {
+
+                window.location = `Admin-assignments.html?/${user}`;
+        })
+        $('#users').on('click', function() {
+
+                window.location = `users.html?/${user}`;
+        })
+        $('#comments').on('click', function() {
+
+                window.location = `comments.html?/${user}`;
+        })
+});
