@@ -118,7 +118,7 @@ function editGrade(){
             })
             $('#rosters').on('click', function() {
 
-                    window.location = `admin%20-%20Rosters.html?/${user}`;
+                    window.location = `Admin-Rosters.html?/${user}`;
             })
             $('#projects').on('click', function() {
 
@@ -126,7 +126,7 @@ function editGrade(){
             })
             $('#sprojects').on('click', function() {
 
-                    window.location = `admin%20-%20subprojects.html?/${user}`;
+                    window.location = `Admin-subprojects.html?/${user}`;;
             })
             $('#assignments').on('click', function() {
 
