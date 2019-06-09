@@ -36,6 +36,31 @@ function editAssignment(){
     });
   }
 
+  function addAssignemnt(){
+    var assignmentid= document.getElementById("AIDA").value;
+    var owner = document.getElementById("OWNERA").value;
+    var aname = document.getElementById("ANAMEA").value;
+    var project = document.getElementById("PROA").value;
+    var jsonObj = {
+      "aid":assignmentid,
+      "owner":owner,
+      "aname":aname,
+      "parent":project};
+
+      $.ajax({
+        url: "https://csc-394-backend.herokuapp.com/assignments/",
+        contentType: "application/json",
+        type: "POST",
+        data: JSON.stringify(jsonObj),
+        success: function(msg){
+          alert("Success");
+        },
+        error: function(msg){
+          alert("Assignment not found, please enter a valid assignment name.");
+        }
+      });
+  }
+
   function deletePro(){
     var aid= document.getElementById("AIDD").value;
     $.ajax({
