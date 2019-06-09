@@ -41,6 +41,34 @@ function editUser(){
       });
     });
   }
+
+  function addUser(){
+    var proid= document.getElementById("pIDA").value;
+    var owner = document.getElementById("OWNERA").value;
+    var pname = document.getElementById("PNAMEA").value;
+    var dueD = document.getElementById("DUEDA").value;
+    var stat = document.getElementById("STATA").value;
+
+      var jsonObj = {
+        "pid":proid,
+        "owner":owner,
+        "pname":pname,
+        "due_date":dueD,
+        "status":stat};
+
+        $.ajax({
+          url: "https://csc-394-backend.herokuapp.com/projects/",
+          contentType: "application/json",
+          type: "POST",
+          data: JSON.stringify(jsonObj),
+          success: function(msg){
+            alert("Success");
+          },
+          error: function(msg){
+            alert("Project not found, please enter a valid project name");
+          }
+        });
+    }
   function deletePro(){
     var pID= document.getElementById("PRO").value;
     $.ajax({
@@ -53,8 +81,6 @@ function editUser(){
         alert(("Unknown project, please enter a valid project"))
       }
     });
-    var url = "https://csc-394-backend.herokuapp.com/projects/" + pname;
-    document.getElementById("url").innerHTML = url;
   }
   $.getJSON('https://csc-394-backend.herokuapp.com/projects/', function(data) {
     var jsonObjs = JSON.stringify(data);
@@ -86,10 +112,6 @@ function editUser(){
           $('#pgrades').on('click', function() {
 
                   window.location = `prof-admin-projectGrades.html?/${user}`;
-          })
-          $('#rosters').on('click', function() {
-
-                  window.location = `Admin-Rosters.html?/${user}`;
           })
           $('#projects').on('click', function() {
 

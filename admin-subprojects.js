@@ -85,10 +85,6 @@ $(document).ready(function() {
 
                 window.location = `prof-admin-projectGrades.html?/${user}`;
         })
-        $('#rosters').on('click', function() {
-
-                window.location = `Admin-Rosters.html?/${user}`;
-        })
         $('#projects').on('click', function() {
 
                 window.location = `Admin-projects.html?/${user}`;

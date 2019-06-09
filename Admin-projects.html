@@ -54,6 +54,7 @@ body {
 .topnav a:hover {
   background-color: #ddd;
   color: black;
+    cursor: pointer;
 }
 .topnav a.active {
   background-color: #2196F3;
@@ -91,7 +92,6 @@ body {
     <a id='home'>Home</a>
             <a id ='agrades'>Assignment Grades</a>
             <a id = 'pgrades'>Project Grades</a>
-    <a id='rosters'>Rosters</a>
     <a id='projects' class="active">Projects</a>
     <a id='sprojects'>Sub Projects</a>
     <a id='assignments'>Assignments</a>
@@ -111,6 +111,20 @@ body {
     
     
 </div>
+    
+    <h2>Add Project:</h2>
+    <div ng-app="">
+
+        <form>
+            Project ID: <input id = "pIDA" type="text" ng-model="editpidA" required>
+            Project Name: <input id = "PNAMEA" type="text" ng-model="pnameA" required>
+            Owner: <input id = "OWNERA" type="text" ng-model="ownerA" required>
+            Status: <input id = "STATA" type="text" ng-model="statA" required>
+            Due Date: <input id = "DUEDA" type="text" ng-model="dueDA" required>
+
+        </form>
+        <input type="submit" onclick="addUser()" value = "Add">
+        
 
     <h2>Edit Project:</h2>
     <div ng-app="">
