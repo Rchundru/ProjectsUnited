@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html> 
+    <head>
+        <title>Homepage</title>
+        <link rel="stylesheet" type="text/css" href="homepage.css">
+    </head>
+    
+    <body>
+        <!–-Top navigation-->
+        <div class="topnav" id="myTopnav">
+            <a id='home'>Home</a>
+            <a class ="active">Projects</a>
+            <a href="login.html">Log Out</a>
+        </div>
+
+        <!–-Main body-->
+            <h1 id ='penis'>Projects You Own</h1>
+            <div id="new"><button id ='add'>Add New Project</button></div>
+            <div id='projects'></div>
+
+        <!–-Start of jquery-->
+        <script src = jquery-3.4.1.js></script>
+        <script src = mustache.js></script>
+        <script>
+            $(document).ready(function() {
+                const aarr = window.location.href.split('/');
+                const user = aarr[aarr.length -1];
+                let numOfProjects = 0;
+                
+                // GET Request for projects
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://csc-394-backend.herokuapp.com/projects/',
+                    success: function(projects) {
+                        $.each(projects, function(i, project) {
+                            numOfProjects++;
+                            if (user === project.owner) {
+                                $('#projects').append(Mustache.render('<br><a href="projectProf.html?/{{pid}}/{{owner}}" style="font-size:20px;color:blue;"> {{pname}} </a>', project));
+                            }      
+                        })
+                    }
+                })
+
+                let count = 0;
+                // POST Request for projects
+                $('#add').on('click', function() {
+                    
+                    count++;
+                    if (count <= 1) {
+                        // Brings in an input box and add button as 4th element of id=info
+                        $('#new').append(Mustache.render("<h3>Project Name: <input type='text'></h3>"))
+                        $('#new').append(Mustache.render("<h3>Due Date: <input type='text'></h3>"))
+                        $('#new').append(Mustache.render("<h3>Project Status: <input type='text'><button>Add</button></h3>"))
+
+                        // When add project button is clicked
+                        $('#new').children().children().eq(3).on('click', function() {
+                            const pname = $('#new').children().children().eq(0).val()
+                            const due_date = $('#new').children().children().eq(1).val()
+                            const status = $('#new').children().children().eq(2).val()
+
+                            const json = {
+                            "comments":[],
+                            "pname":pname,
+                            "due_date":due_date,
+                            "status":status,
+                            "owner":user,
+                            "pid":numOfProjects + 1
+                            }
+                            
+                            $.ajax({
+                                type: 'POST',
+                                url: 'https://csc-394-backend.herokuapp.com/projects/',
+                                data: JSON.stringify(json),
+                                contentType: "application/json",
+                                success: function(newProject) {
+                                    alert('New project added');
+                                    window.location = `projectsProf.html?/${user}`;
+                                }
+                            })
+                        })
+                    }    
+                })
+            })
+        </script>
+    </body>
+</html>
+        

@@ -39,9 +39,9 @@
             // Top Bar Navigation
             $('#projects').on('click', function() {
                 if (auth_level == 'professor') {
-                    window.location = `projectsProf.html?/${user}`;
+                    window.location = `profProjects.html?/${user}`;
                 } else {
-                    window.location = `projects.html?/${user}`;
+                    window.location = `userProjects.html?/${user}`;
                 }
             })
                 $.ajax({
@@ -173,7 +173,8 @@
                                 })
                             })
                         })
-
+                        
+                        /*
                         // PASS ID is an h2 with child button
                         $('#pass').append(Mustache.render(`<h2> Password: {{p}}<button> Edit </button> </h2>`, {'p':password}));
                         
@@ -209,7 +210,7 @@
                                 })
                                 
                             })
-                        })
+                        })*/
                     }
                 })
         })

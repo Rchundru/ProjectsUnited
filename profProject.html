@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html> 
+    <head>
+        <title>Homepage</title>
+        <link rel="stylesheet" type="text/css" href="homepage.css">
+    </head>
+    
+    <body>
+        <h1>hi dad</h1>
+        <!–-toDo for PUT-->
+        <p>name: <input type='text' id='name'></p>
+        <p>drink: <input type='text' id='drink'></p>
+        <button id='add'>Add</button>
+
+        <script>
+        const aarr = window.location.href.split('/');
+        const user = aarr[aarr.length -1];
+        const pid = aarr[aarr.length -2];
+        const pname = decodeURI(aarr[aarr.length - 3]);
+
+        </script>
+    </body>
+    $('h1').children().on('click', function() {
+        console.log($(this).attr("id"));
+    })
+</html>
