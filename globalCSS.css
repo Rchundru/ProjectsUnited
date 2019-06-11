@@ -1,4 +1,8 @@
- table {
+button:hover {
+  cursor: pointer;
+}
+
+table {
   font-family: sans-serif;
   border-collapse: collapse;
   width: 100%;

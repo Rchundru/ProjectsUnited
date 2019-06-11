@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html> 
+    <head>
+        <title>Projects</title>
+        <link rel="stylesheet" type="text/css" href="globalCSS.css">
+    </head>
+    
+    <body>
+        <!–-Top navigation-->
+        <div class="topnav" id="myTopnav">
+            <a id='home'>Home</a>
+            <a id='projects' class ="active">Projects</a>
+            <a href="login.html">Log Out</a>
+        </div>
+    
+        <!–-Main body-->
+            <h1 id ='penis'>Assigned Projects</h1>
+            <div id='projectList'></div>
+
+        <!–-Start of jquery-->
+        <script src = jquery-3.4.1.js></script>
+        <script src = mustache.js></script>
+        <script>
+            $(document).ready(function() {
+                const aarr = window.location.href.split('/');
+                const user = aarr[aarr.length -1];
+
+                // Top Bar Navigation
+                $('#home').on('click', function() {
+                    window.location = `homepage.html?/user/${user}`;
+                })
+
+                $('#projects').on('click', function() {
+                    window.location = `userProjects.html?/${user}`;
+                })
+
+                let projID = []
+                // GET Request for projects roster
+                $.ajax({
+                    type: 'GET',
+                    url: `https://csc-394-backend.herokuapp.com/projectRoster/user/${user}`,
+                    success: function(projects) {
+                        $.each(projects, function(i, project) {
+                            
+                            projID.push(project.projectRoster.project);
+                            //$('#projects').append(Mustache.render('<br><a href="projectProf.html?/{{pid}}/{{owner}}" style="font-size:20px;color:blue;"> {{pname}} </a>', project));
+                        })
+                    }
+                })
+
+                // GET Request for projects
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://csc-394-backend.herokuapp.com/projects/',
+                    success: function(projects) {
+                        $.each(projects, function(i, project) {
+                            if (projID.length > 0) {
+                                for (let i=0; i<projID.length; i++) {
+                                    if (project.pid == projID[i]) 
+                                        $('#projectList').append(`
+                                            <h1>
+                                                <br><a href="userProject.html?/${project.pid}/${user}" 
+                                                style="font-size:20px;color:blue;"> ${project.pname} 
+                                                </a>
+                                            </h1>`
+                                        );
+                                } 
+                            }
+                        })
+                    }
+                })
+            })
+        </script>
+    </body>
+</html>
+        

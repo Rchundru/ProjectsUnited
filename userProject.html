@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html> 
+    <head>
+        <title>Project</title>
+        <link rel="stylesheet" type="text/css" href="globalCSS.css">
+    </head>
+    
+    <body>
+        <!–-Top navigation-->
+        <div class="topnav" id="myTopnav">
+            <a id='home'>Home</a>
+            <a id='projects'>Projects</a>
+            <a id ='project' class='active'>Project</a>
+            <a href="login.html">Log Out</a>
+        </div>
+
+        <!–-Main body-->
+            <div class="site-overlay"></div>
+            <nav class="pushy pushy-left">
+                <ul></ul>
+                <li><a id='1' href="#">Owner: Reuben Diaz</a></li>
+                <li><a href="#">Status: Ongoing</a></li>
+                <li><a href="#">Comments: 5 </a></li>
+                <li><a href="#">Subprojects: 2 </a></li>
+                <li><a href="#">Assignments: 1 </a></li>
+            </nav>
+            
+            <div id="container">
+                <div class="menu-btn">&#9776; <a>Project Statistics</a></div>
+            </div>
+            
+            <div id='header' style="text-align: center"> Subprojects </div>
+                            
+                    
+        <!–-Start of jquery-->
+        <link rel="stylesheet" href="pushy.css">
+        <script src = jquery-3.4.1.js></script>
+        <script src = mustache.js></script>
+        <script src="pushy.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                const aarr = window.location.href.split('/');
+                const user = aarr[aarr.length -1];
+                const parent = aarr[aarr.length-2];
+                
+                let projectOwner;
+                let projectStatus;
+                let commentCount = 0;
+                let subProjectCount = 0;
+                let assignmentCount = 0;
+
+                // Top Bar Navigation
+                $('#home').on('click', function() {
+                    window.location = `homepage.html?/${user}`;
+                })
+
+                //$('#1').append("penis");
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://csc-394-backend.herokuapp.com/subprojects',
+                    success: function(subProjects) {
+                        $.each(subProjects, function(i, subProject) {
+                            if (subProject.parent == parent) 
+                                subProjectCount++;
+                                $('#header').append(`
+                                    <b>
+                                    <h1>
+                                        <a href="userProject.html?/${subProject.sid}/${user}" 
+                                        style="text-align: center;color:blue;">${subProject.sname}
+                                        </a>
+                                    </h1>`
+                                );
+                        })
+                    }
+                })
+                
+                /*
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://csc-394-backend.herokuapp.com/subprojects',
+                    success: function(subProjects) {
+                        $.each(subProjects, function(i, subProject) {
+                            if (subProject.parent == parent) 
+                                $('#header').append(`
+                                    <b>
+                                    <h1>
+                                        <a href="userProject.html?/${subProject.sid}/${user}" 
+                                        style="text-align: center;color:blue;">${subProject.sname}
+                                        </a>
+                                    </h1>`
+                                );
+                        })
+                    }
+                }) */
+            })
+
+            /*
+            <li class="pushy-submenu">
+                    <button>Item 4</button>
+                    <ul>
+                        <li class="pushy-link"><a href="#">Item 4.1</a></li>
+                        <li class="pushy-link"><a href="#">Item 4.2</a></li>
+                        <li class="pushy-link"><a href="#">Item 4.3</a></li>
+                    </ul>
+                </li>
+                </ul>*/
+        </script>
+    </body>
+</html>
+        
