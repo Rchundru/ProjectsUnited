@@ -31,6 +31,16 @@ $(document).ready( function() {
 
             $('#header').append(`   <h1>${subProject.sname}</h1>
                                     <b>
+                                    <table>
+                                        <tr>
+                                            <th>Due Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                        <tr>
+                                            <td>${subProject.due_date}</td>
+                                            <td>${subProject.status}</td>
+                                        </tr>
+                                    </table>
                                    `);
         }
     });
@@ -53,6 +63,43 @@ $(document).ready( function() {
             })
         }
     }) */
-})
+});
+
+function myFunction() {
+    var x = document.getElementById("myTextarea").value;
+    document.getElementById("demo").innerHTML = x;
+}
+
+function editSubProjects(){
+
+    var assignmentid= document.getElementById("AID").value;
+    var owner = document.getElementById("OWNER").value;
+    var aname = document.getElementById("ANAME").value;
+    var project = document.getElementById("PRO").value;
+    var jsonObj = '{"aid":' + '"' + assignmentid + '"' + ','+
+        '"owner":' + '"' + owner + '"' + ','+
+        '"aname":' + '"' + aname + '"' + ',' +
+        '"project":' + '"' + project + '"' +'}';
+
+    $.ajax({
+        url: "https://csc-394-backend.herokuapp.com/assignments/" + aname,
+        contentType: "application/json",
+        type: "PUT",
+        data: JSON.stringify(jsonObj),
+        success: function(msg){
+            alert("Success");
+        },
+        error: function(msg){
+            alert("Assignment not found, please enter a valid assignment name.");
+        }
+    })
+    $.getJSON('https://csc-394-backend.herokuapp.com/assignments/', function(data) {
+        var jsonObjs = JSON.stringify(data);
+        document.getElementById("assignmentsList").innerHTML = jsonObjs;
+    });
+
+    document.getElementById("assignments").innerHTML = jsonObj;
+}
+
 
 
