@@ -37,12 +37,10 @@ function editAssignment(){
   }
 
   function addAssignemnt(){
-    var assignmentid= document.getElementById("AIDA").value;
     var owner = document.getElementById("OWNERA").value;
     var aname = document.getElementById("ANAMEA").value;
     var project = document.getElementById("PROA").value;
     var jsonObj = {
-      "aid":assignmentid,
       "owner":owner,
       "aname":aname,
       "parent":project};

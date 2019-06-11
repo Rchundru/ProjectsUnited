@@ -43,14 +43,12 @@ function editUser(){
   }
 
   function addUser(){
-    var proid= document.getElementById("pIDA").value;
     var owner = document.getElementById("OWNERA").value;
     var pname = document.getElementById("PNAMEA").value;
     var dueD = document.getElementById("DUEDA").value;
     var stat = document.getElementById("STATA").value;
 
       var jsonObj = {
-        "pid":proid,
         "owner":owner,
         "pname":pname,
         "due_date":dueD,
