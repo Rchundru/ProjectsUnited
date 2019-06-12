@@ -74,5 +74,5 @@ function loadAssignment(data, toLoad) {
 }
 
 function routeToAssignment(aid) {
-    window.location = "userAssignment.html?/" + aid;
+    window.location = "userAssignment.html?/" + pid+ "/" + owner + "/" + aid;
 }

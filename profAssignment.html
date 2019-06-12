@@ -1,10 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html>
+    <head>
+        <title>Assignment</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="globalCSS.css">
+        <link rel="stylesheet" href="pushy.css">
+        <script src = jquery-3.4.1.js></script>
+        <script src = mustache.js></script>
+        <script src="pushy.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="profAssignment.js"></script>
+    </head>
 
-</body>
+    <body>
+
+        <!–-Top navigation-->
+        <div class="topnav" id="myTopnav">
+            <a href='javascript:void(0)' id='home'>Home</a>
+            <a href='javascript:void(0)' id='projects'>Projects</a>
+            <a href='javascript:void(0)' id ='project'>Project</a>
+            <a href='javascript:void(0)' id= 'assignments'>Assignments</a>
+            <a href='javascript:void(0)' id= 'assignment' class="active">Assignment</a>
+            <a href="login.html">Log Out</a>
+        </div>
+
+        <!–-Main body-->
+        <div class="site-overlay"></div>
+
+        <div class="container" style="margin-top:30px">
+                <!-- Body of sub projects-->
+                <div class="row">
+                    <div class="col-sm-1"></div>
+    
+                    <div class="col-sm-8">
+                        <div id="aname"></div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Student Username:</th>
+                                    <th>Grade:</th>
+                                    <th>Options:</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table"></tbody>
+                        </table>
+
+                        <div id="editForm" style="text-align: center; display: none"><h3>Edit Student Grade:</h3>
+                            <div ng-app="">
+                                <form>
+                                    Student: <input id="STUDENT" type="text" ng-model="student" required>
+                                    Student Grade: <input id = "GRADE" type="text" ng-model="grade" required>
+                                    <span><button type="button" onclick="editAssignmentRoster()" class="btn btn-primary">Submit</button></span>
+                                </form>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" onclick="showAddForm()">Add Student</button>
+                        <button type="button" class="btn btn-primary" onclick="showEditAssignmentForm()">Edit Assignment</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteAssignment()">Delete Assignment</button>
+                        
+                        <div id="addForm" style="text-align: center; display: none"><h3>Add Student to Roster:</h3>
+                            <div ng-app="">
+                                <form>
+                                    Student: <input id="ASTUDENT" type="text" ng-model="astudent" required>
+                                    Student Grade: <input id = "AGRADE" type="text" ng-model="agrade" required>
+                                    <span><button type="button" onclick="addAssignmentRoster()" class="btn btn-primary">Submit</button></span>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div id="editAssignmentForm" style="text-align: center; display: none"><h3>Edit Assignment:</h3>
+                            <div ng-app="">
+                                <form>
+                                    Assignment Name: <input id="ANAME" type="text" ng-model="aname" required>
+                                    <span><button type="button" onclick="editAssignment()" class="btn btn-primary">Submit</button></span>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="col-sm-3">
+                        <h2>Comments:</h2>
+                        <p id="commentList"></p>
+
+                        <form>
+                            <input type="text" name="body" id="body">
+                            <br>
+                            <input type="radio" name="stati" value="none" hidden checked>
+                            <input type="radio" name="stati" value="&#128077;"> &#128077;
+                            <input type="radio" name="stati" value="&#128078;"> &#128078;
+                            <br>
+                            <button type="button" class="btn btn-primary" onclick="postComment()">Post</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+    </body>
 </html>

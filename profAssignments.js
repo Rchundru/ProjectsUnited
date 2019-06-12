@@ -48,7 +48,7 @@ function loadAssignments(assignments) {
 }
 
 function routeToAssignment(aid) {
-    window.location = "profAssignment.html?/" + aid;
+    window.location = "profAssignment.html?/" + pid + "/" + owner + "/" + aid;
 }
 
 function addAssignment(){
