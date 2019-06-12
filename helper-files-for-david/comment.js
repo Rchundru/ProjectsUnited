@@ -36,8 +36,8 @@ function postComment() {
 		type: "POST",
 		data: JSON.stringify(jsonObj),
 		success: function(data) {
-			//location.reload();
 			alert("Great success!");
+			location.reload();
 		},
 		error: function(data) {
 			alert("Could not post comment; data transmission error.");
