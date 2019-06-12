@@ -15,7 +15,7 @@ $(document).ready( function() {
 
     // Top Bar Navigation
     $('#home').on('click', function() {
-        window.location = `homepage.html?/${user}`;
+        window.location = `homepage.html?/user/${user}`;
     });
 
     $('#projects').on('click', function() {
@@ -23,7 +23,7 @@ $(document).ready( function() {
     });
 
     $('#project').on('click', function() {
-        window.location =  `userProject.html?/${user}/${parent}`;
+        window.location =  `userProject.html?/${parent}/${user}`;
     });
 
     //$('#1').append("penis");
