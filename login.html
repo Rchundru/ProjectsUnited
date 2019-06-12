@@ -3,7 +3,7 @@
 
     <!––Title of the Page and link to style sheet-->
     <head>
-        <title>Login</title>
+        <title>ProjectsUnited Login Page</title>
         <link rel="stylesheet" type="text/css" href="login.css">
     </head>
 
@@ -18,13 +18,19 @@
                     <li>Username: <input class="username" type="text" name="username" required></li>
                     <li>Password: <input class="password" type="password" name="password" required></li>
                 </u1>
-                <input type="button" class="submit" value="Login" name="submit" onclick="validate()">
+                <input type="button" class="submit" value="Login" name="submit" onclick="validate()"> <br>
+                <br><input type="button" class="submit" value="Sign Up" name="signUp" onclick="window.location='signup.html';">
             </form>
         </div>
 
         <script>
         let count=0; // number of times one can attempt to login
         let user; // unique username
+            
+        function signUp(){
+            var location = 'signup.html';
+                window.location = location;
+        }
         
         /*
         Occurs when login button clicked. Grabs the user data and checks to see if 

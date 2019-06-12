@@ -5,6 +5,15 @@ function addUser(){
   var firstName = document.getElementById("first_name").value;
   var lastName = document.getElementById("last_name").value;
   var auth_level = "user";
+  console.log("initial length: " + password.length)
+
+  if(password.length <32){
+    var padding = 32-password.length;
+    for(i=0; i<padding; i++){
+      password += " ";
+      console.log(password.length)
+    }
+  }
 
   $.getJSON('https://csc-394-backend.herokuapp.com/users/', function(data) {
     var isValid = true;
@@ -28,13 +37,14 @@ function addUser(){
         "auth_level":auth_level
       };
 
-        $.ajax({
+       $.ajax({
           url: "https://csc-394-backend.herokuapp.com/users/",
           contentType: "application/json",
           type: "POST",
           data: JSON.stringify(jsonObj),
           success: function(msg){
             alert("Success");
+            window.location = `homepage.html?/user/${username}`;
           },
           error: function(msg){
             alert("error, try again");
