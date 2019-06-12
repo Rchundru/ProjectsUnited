@@ -87,7 +87,7 @@ function delSubProject() {
             type: "DELETE",
             success: function (msg) {
                 alert("Sub Project deleted: " + msg);
-                window.location = `userProject.html?/${user}/${parent}`;
+                window.location = `userProject.html?/${parent}/${user}`;
             },
             error: function (msg) {
                 alert(("Unknown sub project, please enter a valid sub project"))
