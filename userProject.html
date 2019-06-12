@@ -8,22 +8,23 @@
     <body>
         <!–-Top navigation-->
         <div class="topnav" id="myTopnav">
-            <a id='home'>Home</a>
+            <a id='home' href='javascript:void(0)'>Home</a>
             <a id='projects'>Projects</a>
             <a id ='project' class='active'>Project</a>
             <a href="login.html">Log Out</a>
         </div>
-
+        
         <!–-Main body-->
             <div class="site-overlay"></div>
             <nav class="pushy pushy-left">
                 <ul></ul>
-                <li><a id='owner'></a></li>
-                <li><a id='status'></a></li>
-                <li><a id='comments'></a></li>
-                <li><a id='subprojects'></a></li>
-                <li><a id='assignments'>Assignments: 1 </a></li>
+                <li><a href='javascript:void(0)' id='owner'></a></li>
+                <li><a href='javascript:void(0)' id='status'></a></li>
+                <li><a href='javascript:void(0)' id='comments'></a></li>
+                <li><a href='javascript:void(0)' id='subprojects'></a></li>
+                <li><a href='javascript:void(0)' id='assignments'>Assignments: 1 </a></li>
             </nav>
+            
             <div id="container">
                 <div class="menu-btn">&#9776; <a>Project Statistics</a></div>
             </div>
@@ -36,6 +37,19 @@
                     <div class="col-sm-8">
                         <h2>Subprojects:</h2>
                         <div id='table' style="text-align: center"></div>
+                    
+                        <form>
+                            <br>
+                            <br>
+                            <h3>Add Subproject</h3>
+                            <input type="text" id="subby">Subproject Name</input>
+                            <br>
+                            <input type="text" id="duey">Due Date</input>
+                            <br>
+                            <input type="text" id="staty">Status</input>
+                            <br>
+                            <button type="button" class="btn btn-primary" onclick="addSubproject()">Post</button>
+                        </form>
                     </div>
     
                     <div class="col-sm-3">
@@ -63,24 +77,6 @@
         <script src="pushy.min.js"></script>
         <script>
             $(document).ready(function() {
-                $('#table').append(`     
-                <tr>
-                    <th>Name</th>
-                    <th>Due Date</th>
-                    <th>Status</th>
-                    <th>Responsibility</th>
-                </tr>
-                `);
-
-                $('#commentList').append(`
-                    <tr>
-                        <td>Author</td>
-                        <td>Status</td>
-                        <td>Comment</td>
-                        <td>Timestamp</td>
-                    </tr> 
-                `);
-                
                 const aarr = window.location.href.split('/');
                 const user = aarr[aarr.length -1];
                 const parent = aarr[aarr.length-2];
@@ -115,10 +111,10 @@
                         for (let index=0; index<project.comments.length;index++) {
                             $('#commentList').append(`
                                 <tr>
-                                    <td>Author: ${project.comments[index].author}</td>
-                                    <td>Status: ${project.comments[index].status}</td>
-                                    <td>Comment: ${project.comments[index].body}</td>
-                                    <td>Timestamp: ${project.comments[index].timestamp}</td>
+                                    <td>${project.comments[index].author}</td>
+                                    <td>${project.comments[index].status}</td>
+                                    <td>${project.comments[index].body}</td>
+                                    <td>${project.comments[index].timestamp}</td>
                                 </tr> 
                             `);
                         }
@@ -194,44 +190,79 @@
                 const aarr = window.location.href.split('/');
                 const user = aarr[aarr.length -1];
                 const parent = aarr[aarr.length-2];
-                    alert("Running post method.");
+                alert("Running post method.");
 
-                    // Get the body of the comment.
-                    var body = document.getElementById("body").value;
-                    console.log(body);
-                    // Get all the statuses (stati?), and pick the one that's selected.
-                    // var stati = document.getElementsById("status").value;
-                    var status = document.querySelector('input[name="stati"]:checked').value;
+                // Get the body of the comment.
+                var body = document.getElementById("body").value;
+                
+                // Get all the statuses (stati?), and pick the one that's selected.
+                // var stati = document.getElementsById("status").value;
+                var status = document.querySelector('input[name="stati"]:checked').value;
 
-                    //alert("Building JSON object.");
+                //alert("Building JSON object.");
 
-                    var jsonObj = {
-                        "status": status,
-                        "body": body,
-                        "author": user,
-                        "projects": [
-                            {
-                                "pid": parent
-                            }
-                        ]
-                    };
-
-                    //alert("Posting comment.");
-
-                    $.ajax({
-                        url: "https://csc-394-backend.herokuapp.com/comments/",
-                        contentType: "application/json",
-                        type: "POST",
-                        data: JSON.stringify(jsonObj),
-                        success: function(data) {
-                            location.reload();
-                            //alert("Great success!");
-                        },
-                        error: function(data) {
-                            //alert("Could not post comment; data transmission error.");
+                var jsonObj = {
+                    "status": status,
+                    "body": body,
+                    "author": user,
+                    "projects": [
+                        {
+                            "pid": parent
                         }
-                    });
-                }   
+                    ]
+                };
+
+                //alert("Posting comment.");
+
+                $.ajax({
+                    url: "https://csc-394-backend.herokuapp.com/comments/",
+                    contentType: "application/json",
+                    type: "POST",
+                    data: JSON.stringify(jsonObj),
+                    success: function(data) {
+                        location.reload();
+                        //alert("Great success!");
+                    },
+                    error: function(data) {
+                        //alert("Could not post comment; data transmission error.");
+                    }
+                });
+            }
+            
+            function addSubproject() {
+                const aarr = window.location.href.split('/');
+                const user = aarr[aarr.length -1];
+                const parent = aarr[aarr.length-2];
+                alert("Running post method.");
+
+                // Get the body of the post request
+                var sname = document.getElementById("subby").value;
+                var due_date = document.getElementById("duey").value;
+                var status = document.getElementById("subby").value;
+
+                var jsonObj = {
+                    "sname": sname,
+                    "due_date": due_date,
+                    "status": status,
+                    "parent": parent,
+                };
+
+                //alert("Posting comment.");
+
+                $.ajax({
+                    url: "https://csc-394-backend.herokuapp.com/subprojects",
+                    contentType: "application/json",
+                    type: "POST",
+                    data: JSON.stringify(jsonObj),
+                    success: function(data) {
+                        location.reload();
+                        //alert("Great success!");
+                    },
+                    error: function(data) {
+                        //alert("Could not post comment; data transmission error.");
+                    }
+                });
+            }
             /*
             <li class="pushy-submenu">
                     <button>Item 4</button>
