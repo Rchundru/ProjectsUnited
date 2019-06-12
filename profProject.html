@@ -8,9 +8,10 @@
     <body>
         <!–-Top navigation-->
         <div class="topnav" id="myTopnav">
-            <a id='home'>Home</a>
-            <a id='projects'>Projects</a>
-            <a id ='project' class='active'>Project</a>
+            <a href='javascript:void(0)' id='home'>Home</a>
+            <a href='javascript:void(0)' id='projects'>Projects</a>
+            <a href='javascript:void(0)' id ='project' class='active'>Project</a>
+            <a href='javascript:void(0)' id= 'assignments'>Assignments</a>
             <a href="login.html">Log Out</a>
         </div>
 
@@ -96,15 +97,18 @@
 
                 // Top Bar Navigation
                 $('#home').on('click', function() {
-                    window.location = `homepage.html?/${user}`;
+                    window.location = `homepage.html?/professor/${user}`;
                 })
 
                 $('#projects').on('click', function() {
-                    window.location = `userProjects.html?/${user}`;
+                    window.location = `profProjects.html?/${user}`;
                 })
 
                 $('#project').on('click', function() {
-                    window.location = `userProject.html?/${parent}/${user}`;
+                    window.location = `profProject.html?/${parent}/${user}`;
+                })
+                $('#assignments').on('click', function() {
+                    window.location = `profAssignments.html?/${parent}/${user}`;
                 })
                 
                 // GET REQUEST FOR PROJECT
@@ -159,7 +163,7 @@
                                                             <td>${subProject.sname}</td>
                                                             <td>${subProject.due_date}</td>
                                                             <td class="${statColor}">${subProject.status}</td>
-                                                            <td><a href = 'userProject.html'>Yes</a></td>
+                                                            <td><a href = 'userSubProject.html?/${parent}/${user}/${subProject.sid}'>Owner</a></td>
                                                         </tr> 
                                                     `);
                                             for (let j=0; j<subProjectIDs.length; j++) {
@@ -202,7 +206,7 @@
                 const aarr = window.location.href.split('/');
                 const user = aarr[aarr.length -1];
                 const parent = aarr[aarr.length-2];
-                    alert("Running post method.");
+                    //alert("Running post method.");
 
                     // Get the body of the comment.
                     var body = document.getElementById("body").value;

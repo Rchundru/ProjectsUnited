@@ -8,13 +8,13 @@
     <body>
         <!–-Top navigation-->
         <div class="topnav" id="myTopnav">
-            <a id='home'>Home</a>
+            <a id='home' href='javascript:void(0)'>Home</a>
             <a id='projects' class ="active">Projects</a>
             <a href="login.html">Log Out</a>
         </div>
     
         <!–-Main body-->
-            <h1 id ='penis'>Assigned Projects</h1>
+            <h1 id ='penis' align="center">Assigned Projects</h1>
             <div id='projectList'></div>
 
         <!–-Start of jquery-->
@@ -53,23 +53,32 @@
                     type: 'GET',
                     url: 'https://csc-394-backend.herokuapp.com/projects/',
                     success: function(projects) {
+                        //var list = "";
+                        var list = '<table><tr></th></th></tr>';
+                        //$('#projectList').append('<table><tr></th><th>Assigned Projects</th></tr>');
                         $.each(projects, function(i, project) {
                             if (projID.length > 0) {
                                 for (let i=0; i<projID.length; i++) {
-                                    if (project.pid == projID[i]) 
-                                        $('#projectList').append(`
+                                    if (project.pid == projID[i]) {
+                                       /* $('#projectList').append(`
+                                            <tr><td>
                                             <h1>
-                                                <br><a href="userProject.html?/${project.pid}/${user}" 
+                                                <a href="userProject.html?/${project.pid}/${user}" 
                                                 style="font-size:20px;color:blue;"> ${project.pname} 
                                                 </a>
-                                            </h1>`
-                                        );
+                                            </h1>
+                                            </td></tr>` */
+                                        list += '<tr><td><h1><a href="userProject.html?/' + project.pid + '/'+ user +'"' + 'style="font-size:20px;color:blue;">' + project.pname + '</a></h1></td></tr>';
+                                    console.log(list);
+                                    }
+                                }
                                 } 
-                            }
-                        })
+                            });
+                        document.getElementById("projectList").innerHTML =list + "</table>";
                     }
                 })
-            })
+                        //document.getElementById("projectList").innerHTML = table + list + "</table>";
+                    });
         </script>
     </body>
 </html>
