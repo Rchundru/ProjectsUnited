@@ -1,6 +1,10 @@
+const aarr = window.location.href.split('/');
+const sid = aarr[aarr.length-1]
+const author = aarr[aarr.length - 2];
+const geturl = "https://csc-394-backend.herokuapp.com/subprojects/";
+const posturl = "https://csc-394-backend.herokuapp.com/comments/";
+
 $(document).ready( function() {
-    const aarr = window.location.href.split('/');
-    const sid = aarr[aarr.length-1]
     const user = aarr[aarr.length -2];
     const parent = aarr[aarr.length-3];
 
@@ -9,6 +13,7 @@ $(document).ready( function() {
     let commentCount = 0;
     let subProjectCount = 0;
     let assignmentCount = 0;
+    let statColor;
 
     // Top Bar Navigation
     $('#home').on('click', function() {
@@ -28,6 +33,9 @@ $(document).ready( function() {
         type: 'GET',
         url: `https://csc-394-backend.herokuapp.com/subprojects/${sid}`,
         success: function(subProject) {
+            if(subProject.status == 'Ongoing') statColor = 'bg-warning';
+            else if(subProject.status == 'Delayed') statColor = 'bg-danger';
+            else if(subProject.status == 'Complete') statColor = 'bg-success';
 
             $('#header').append(`   <h1>${subProject.sname}</h1>
                                     <b>
@@ -35,34 +43,31 @@ $(document).ready( function() {
                                         <tr>
                                             <th>Due Date</th>
                                             <th>Status</th>
+                                            <td rowspan="2"><div class="text-center"><button type="button" class="btn btn-primary" onclick="addForm()">Edit</button></div></td>
                                         </tr>
                                         <tr>
                                             <td>${subProject.due_date}</td>
-                                            <td>${subProject.status}</td>
+                                            <td class="${statColor}">${subProject.status}</td>
                                         </tr>
                                     </table>
                                    `);
         }
     });
 
-    /*
+    // Make a query,
     $.ajax({
-        type: 'GET',
-        url: 'https://csc-394-backend.herokuapp.com/subprojects',
-        success: function(subProjects) {
-            $.each(subProjects, function(i, subProject) {
-                if (subProject.parent == parent)
-                    $('#header').append(`
-                        <b>
-                        <h1>
-                            <a href="userProject.html?/${subProject.sid}/${user}"
-                            style="text-align: center;color:blue;">${subProject.sname}
-                            </a>
-                        </h1>`
-                    );
-            })
+        url: geturl + sid,
+        contentType: "application/json",
+        type: "GET",
+        // and if it succeeds, fill out our table.
+        success: function(data){
+            fillTable(data);
+        },
+        error: function(data){
+            alert("Something went wrong!");
         }
-    }) */
+    });
+
 });
 
 function myFunction() {
@@ -70,36 +75,124 @@ function myFunction() {
     document.getElementById("demo").innerHTML = x;
 }
 
-function editSubProjects(){
-
-    var assignmentid= document.getElementById("AID").value;
-    var owner = document.getElementById("OWNER").value;
-    var aname = document.getElementById("ANAME").value;
-    var project = document.getElementById("PRO").value;
-    var jsonObj = '{"aid":' + '"' + assignmentid + '"' + ','+
-        '"owner":' + '"' + owner + '"' + ','+
-        '"aname":' + '"' + aname + '"' + ',' +
-        '"project":' + '"' + project + '"' +'}';
-
-    $.ajax({
-        url: "https://csc-394-backend.herokuapp.com/assignments/" + aname,
-        contentType: "application/json",
-        type: "PUT",
-        data: JSON.stringify(jsonObj),
-        success: function(msg){
-            alert("Success");
-        },
-        error: function(msg){
-            alert("Assignment not found, please enter a valid assignment name.");
-        }
-    })
-    $.getJSON('https://csc-394-backend.herokuapp.com/assignments/', function(data) {
-        var jsonObjs = JSON.stringify(data);
-        document.getElementById("assignmentsList").innerHTML = jsonObjs;
-    });
-
-    document.getElementById("assignments").innerHTML = jsonObj;
+function addForm() {
+    document.getElementById("editForm").style.display="block";
 }
 
 
 
+function editSubProject(){
+    const aarr = window.location.href.split('/');
+    const subid = aarr[aarr.length-1]
+    var par;
+    var sname =   document.getElementById("SNAME").value;
+    var ddate = document.getElementById("DDATE").value;
+    var stat = document.getElementById("STAT").value;
+
+    $.getJSON('https://csc-394-backend.herokuapp.com/subprojects/' + subid, function(data) {
+        if(par === undefined || par === ""){
+            par = `${data.parent}`;
+        }
+        if(sname === undefined || sname === ""){
+            sname = `${data.sname}`;
+        }
+        if(ddate === undefined || ddate === ""){
+            ddate = `${data.due_date}`;
+        }
+        if(stat === undefined || stat === ""){
+            stat = `${data.status}`;
+        }
+
+        var jsonObj = {
+            "sid":subid,
+            "parent":par,
+            "sname":sname,
+            "due_date":ddate,
+            "status":stat};
+
+        $.ajax({
+            url: "https://csc-394-backend.herokuapp.com/subprojects/" + subid,
+            contentType: "application/json",
+            type: "PUT",
+            data: JSON.stringify(jsonObj),
+            success: function(msg){
+                //alert("Success");
+                location.reload();
+            },
+            error: function(msg){
+                alert("Sub Project not found, please enter a valid sub project name");
+            }
+        });
+    });
+
+}
+
+function postComment() {
+    alert("Running post method.");
+
+    // Get the body of the comment.
+    var body = document.getElementById("body").value;
+
+    // Get all the statuses (stati?), and pick the one that's selected.
+    // var stati = document.getElementsById("status").value;
+    var status = document.querySelector('input[name="stati"]:checked').value;
+
+    //alert("Building JSON object.");
+
+    var jsonObj = {
+        "status": status,
+        "body": body,
+        "author": author,
+        "sub_projects": [
+            {
+                "sid": sid
+            }
+        ]
+    };
+
+    //alert("Posting comment.");
+
+    $.ajax({
+        url: posturl,
+        contentType: "application/json",
+        type: "POST",
+        data: JSON.stringify(jsonObj),
+        success: function(data) {
+            location.reload();
+            //alert("Great success!");
+        },
+        error: function(data) {
+            //alert("Could not post comment; data transmission error.");
+        }
+    });
+
+    //alert("Another alert (just cause).");
+}
+
+function fillTable(data) {
+    // The HTML table we'll draw.
+    var table = '<table> <tr> <th>Author:</th> <th>Status:</th> <th>Comment:</th> </tr>';
+
+    // A series of dummy table-rows.
+    var list = "";
+
+    // For each comment,
+    for(i in data.comments){
+        // Draw a new table row,
+        list += "<tr>";
+
+        // With the author, status, and data.
+        list += "<td>" + data.comments[i].author + "</td>";
+        list += "<td>" + data.comments[i].status + "</td>";
+        list += "<td>" + data.comments[i].body + "</td>";
+
+        // Don't forget closing tags!
+        list += "</tr>";
+    }
+
+    // Append the new rows to the table, and add a closing tag.
+    table += list + "</table>";
+
+    // Put the table into our HTML.
+    document.getElementById("commentList").innerHTML = table;
+}
