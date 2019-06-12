@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <title>ProjectsUnited Sign up Page</title>
+        <link rel="stylesheet" type="text/css" href="login.css">
+    </head>
+<body>
+    <script type="text/javascript" src="signup.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    
+   <div class="container">
+            <div class="header">
+                <h1>Welcome to ProjectsUnited</h1>
+            </div>
+
+        <form align= "center">Username: <br><input id = "username" type="text" ng-model="username"><br>
+           <br> Email: <br><input id = "email" type="text" ng-model="email"><br>
+            <br>Password (Must be exaclty 32 characters): <br><input id = "password" type="text" ng-model="password"><br>
+            <br>First Name: <br><input id = "first_name" type="text" ng-model="first_name"><br>
+            <br>Last Name: <br><input id = "last_name" type="text" ng-model="last_name"><br>
+        </form>
+        <input type="button" class="submit" onclick="addUser()" value = "Sign up">
+    </div>
+        
+  
+</body>
+</html>
