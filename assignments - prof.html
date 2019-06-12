@@ -170,7 +170,7 @@ body {
     
     
 <div class="topnav" id="myTopnav">
-  <a href="users.html" class ="active">Home</a>
+  <a href="#classes" class ="active">Classes</a>
   <a href="#grades">Grades</a>
   
   <script>
@@ -178,10 +178,14 @@ body {
             const user = aarr[aarr.length -1];
   </script>
   
-    <a href="login.html" text align="right">Log Out</a>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <a href="users.html">Users</a>
+    <a href="comments.html">Comments</a>
 
-    <div class="mypanel" align="right"></div>
+    
+    <a href="login.html" text align="right">Log Out</a>
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+     <div class="mypanel" align="right"></div>
 	
 
 
@@ -229,6 +233,8 @@ body {
             document.getElementById("assignments").innerHTML = jsonObj;
         }
     </script>
+	
+	
     
 
   <a href="javascript:void(0);" class="icon" onclick="myFunction()">
@@ -274,13 +280,16 @@ function myFunction() {
 <script>
 function myFunction() {
   var x = document.getElementById("myTextarea").value;
+  var author = "ggk";
+var status = "neutral";
+var body = "this is a test comment";
  
   document.getElementById("demo").innerHTML = x;
   
   $.ajax({
   method: "POST",
   url: 'https://csc-394-backend.herokuapp.com/comments/',
-  data: JSON.stringify([{"aid":1,"aname":"test","comments":["hey"],"owner":"ar1","parent":3},{"aid":2,"aname":"test 2","comments":[],"owner":"ar1","parent":3},{"aid":3,"aname":"test 3","comments":[],"owner":"rbd","parent":4},{"aid":4,"aname":"test 4","comments":[],"owner":"ar1","parent":5}])
+  data: JSON.stringify([{"aid":1,"comments":["hey"],"owner":"ar1"},{"aid":2,"comments":[],"owner":"ar1","parent":3},{"aid":3,"comments":[],"owner":"rbd"},{"aid":4,"comments":[],"owner":"ar1"}])
   , 
   success: function(info){console.log(info);},
   dataType: "json"
