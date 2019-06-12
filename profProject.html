@@ -8,10 +8,9 @@
     <body>
         <!–-Top navigation-->
         <div class="topnav" id="myTopnav">
-            <a href='javascript:void(0)' id='home'>Home</a>
-            <a href='javascript:void(0)' id='projects'>Projects</a>
-            <a href='javascript:void(0)' id ='project' class='active'>Project</a>
-            <a href='javascript:void(0)' id= 'assignments'>Assignments</a>
+            <a id='home'>Home</a>
+            <a id='projects'>Projects</a>
+            <a id ='project' class='active'>Project</a>
             <a href="login.html">Log Out</a>
         </div>
 
@@ -97,18 +96,15 @@
 
                 // Top Bar Navigation
                 $('#home').on('click', function() {
-                    window.location = `homepage.html?/professor/${user}`;
+                    window.location = `homepage.html?/${user}`;
                 })
 
                 $('#projects').on('click', function() {
-                    window.location = `profProjects.html?/${user}`;
+                    window.location = `userProjects.html?/${user}`;
                 })
 
                 $('#project').on('click', function() {
-                    window.location = `profProject.html?/${parent}/${user}`;
-                })
-                $('#assignments').on('click', function() {
-                    window.location = `profAssignments.html?/${parent}/${user}`;
+                    window.location = `userProject.html?/${parent}/${user}`;
                 })
                 
                 // GET REQUEST FOR PROJECT
@@ -206,7 +202,7 @@
                 const aarr = window.location.href.split('/');
                 const user = aarr[aarr.length -1];
                 const parent = aarr[aarr.length-2];
-                    //alert("Running post method.");
+                    alert("Running post method.");
 
                     // Get the body of the comment.
                     var body = document.getElementById("body").value;

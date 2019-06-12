@@ -8,16 +8,15 @@
     <body>
         <!–-Top navigation-->
         <div class="topnav" id="myTopnav">
-            <a href='javascript:void(0)' id='home'>Home</a>
-            <a href='javascript:void(0)' id='projects1' class="active">Projects</a>
-            <a href='javascript:void(0)' id='projectsGrades' class="active">Project Grades</a>
+            <a id='home'>Home</a>
+            <a class ="active">Projects</a>
             <a href="login.html">Log Out</a>
         </div>
 
         <!–-Main body-->
             <h1 id ='penis'>Projects You Own</h1>
+            <div id="new"><button id ='add'>Add New Project</button></div>
             <div id='projects'></div>
-        <br><div id="new" align="center"><button id ='add'>Add New Project</button></div><br>
 
         <!–-Start of jquery-->
         <script src = jquery-3.4.1.js></script>
@@ -28,26 +27,11 @@
                 const user = aarr[aarr.length -1];
                 let numOfProjects = 0;
                 
-                  $('#home').on('click', function() {
-                      window.location = `homepage.html?/professor/${user}`;
-                  });
-
-    $('#projects1').on('click', function() {
-        window.location =  `profProjects.html?/${user}`;
-    });
-                $('#projectsGrades').on('click', function() {
-        window.location =  `prof-admin-projectGrades.html?/${user}`;
-    });
-
-
-
                 // GET Request for projects
-               /* $.ajax({
+                $.ajax({
                     type: 'GET',
                     url: 'https://csc-394-backend.herokuapp.com/projects/',
                     success: function(projects) {
-                         var list = '<table><tr></th></th></tr>';
-                        
                         $.each(projects, function(i, project) {
                             numOfProjects++;
                             if (user === project.owner) {
@@ -55,22 +39,7 @@
                             }      
                         })
                     }
-                }) */
-     $.getJSON('https://csc-394-backend.herokuapp.com/projects/', function(data) {
-      var list = "";
-      var table = '<table><tr><th>Projects</th></tr>';
-         const curraarr = window.location.href.split('/');
-         const curruser = curraarr[curraarr.length -1];
-         console.log(curruser);
-        for(i in data){
- 
-            if(data[i].owner === curruser){
-                console.log(data[i].owner)
-              list += '<tr><td><a href="profProject.html?/'+data[i].pid+'/'+data[i].owner+ '"'+' style="font-size:20px;color:blue;">'+data[i].pname+'</a>' +"</td></tr>";
-          }
-        }
-        document.getElementById("projects").innerHTML = table + list + "</table>";
-      });
+                })
 
                 let count = 0;
                 // POST Request for projects
