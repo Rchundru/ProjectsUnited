@@ -42,16 +42,6 @@
                     <div class="col-sm-3">
                         <h2>Project Comments:</h2>
                         <p id="commentList"></p>
-    
-                        <form>
-                            <input type="text" name="body" id="body">
-                            <br>
-                            <input type="radio" name="stati" value="none" hidden checked>
-                            <input type="radio" name="stati" value="&#128077;"> &#128077;
-                            <input type="radio" name="stati" value="&#128078;"> &#128078;
-                            <br>
-                            <button type="button" class="btn btn-primary" onclick="postComment()">Post</button>
-                        </form>
                     </div>
                 </div>
                 <br><br>
@@ -163,7 +153,7 @@
                                                             <td>${subProject.sname}</td>
                                                             <td>${subProject.due_date}</td>
                                                             <td class="${statColor}">${subProject.status}</td>
-                                                            <td><a href = 'userSubProject.html?/${parent}/${user}/${subProject.sid}'>Owner</a></td>
+                                                            <td><a href = 'profSubProject.html?/${parent}/${user}/${subProject.sid}'>Owner</a></td>
                                                         </tr> 
                                                     `);
                                             for (let j=0; j<subProjectIDs.length; j++) {
