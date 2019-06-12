@@ -78,7 +78,7 @@
                     
                     <form>
                         <h2>Add Student to Subproject</h2>
-                        <input type="text" id="sid">Subproject ID</input>
+                        <input type="number" id="sid">Subproject ID</input>
                             <br>
                             <input type="text" id="user">Username</input>
                             <br>
@@ -290,7 +290,7 @@
                 var jsonObj = {
                     "responsibility":responsibility,
                     "subProjectRoster":{
-                        "sub-project":sid,
+                        "sub_project":sid,
                         "student":user
                     }
                 }
@@ -301,7 +301,7 @@
                     type: "POST",
                     data: JSON.stringify(jsonObj),
                     success: function(data) {
-                        //location.reload();
+                        location.reload();
                         //alert("Great success!");
                     },
                     error: function(data) {
