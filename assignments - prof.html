@@ -283,16 +283,27 @@ function myFunction() {
   var author = "ggk";
 var status = "neutral";
 var body = "this is a test comment";
- 
+var jsonObj = {
+"author" :author,
+"status" :status,
+"body" :body,
+"projects" :[],
+"assignments":[],
+"sub_projects" :[{"sid":1}] 
+};
   document.getElementById("demo").innerHTML = x;
   
   $.ajax({
-  method: "POST",
   url: 'https://csc-394-backend.herokuapp.com/comments/',
-  data: JSON.stringify([{"aid":1,"comments":["hey"],"owner":"ar1"},{"aid":2,"comments":[],"owner":"ar1","parent":3},{"aid":3,"comments":[],"owner":"rbd"},{"aid":4,"comments":[],"owner":"ar1"}])
-  , 
-  success: function(info){console.log(info);},
-  dataType: "json"
+  contentType: "application/json" ,
+  type: "Post",
+  data: JSON.stringify(jsonObj),
+  success: function(msg){
+  alert("Success");
+  },
+  error: function(msg){
+  alert("user nor found, please enter a valid username");  
+  }
 });
   
   
