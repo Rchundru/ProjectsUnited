@@ -8,6 +8,10 @@ const parent = aarr[aarr.length-3];
 
 $(document).ready( function() {
     let statColor;
+    const page = aarr[aarr.length-4];
+
+    const auth = page.indexOf("prof");
+
 
     // Top Bar Navigation
     $('#home').on('click', function() {
@@ -31,7 +35,8 @@ $(document).ready( function() {
             else if(subProject.status == 'Delayed') statColor = 'bg-danger';
             else if(subProject.status == 'Complete') statColor = 'bg-success';
 
-            $('#header').append(`   <h1>${subProject.sname}</h1>
+            if(auth === -1){
+                $('#header').append(`   <h1>${subProject.sname}</h1>
                                     <b>
                                     <table>
                                         <tr>
@@ -51,6 +56,22 @@ $(document).ready( function() {
                                         </tr>
                                     </table>
                                    `);
+            }
+            else{
+                $('#header').append(`   <h1>${subProject.sname}</h1>
+                                    <b>
+                                    <table>
+                                        <tr>
+                                            <th>Due Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                        <tr>
+                                            <td>${subProject.due_date}</td>
+                                            <td class="${statColor}">${subProject.status}</td>
+                                        </tr>
+                                    </table>
+                                   `);
+            }
         }
     });
 
