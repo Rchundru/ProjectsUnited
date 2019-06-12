@@ -18,19 +18,27 @@
             <div class="site-overlay"></div>
             <nav class="pushy pushy-left">
                 <ul></ul>
-                <li><a id='1' href="#">Owner: Reuben Diaz</a></li>
-                <li><a href="#">Status: Ongoing</a></li>
-                <li><a href="#">Comments: 5 </a></li>
-                <li><a href="#">Subprojects: 2 </a></li>
-                <li><a href="#">Assignments: 1 </a></li>
+                <li><a id='owner'></a></li>
+                <li><a id='status'></a></li>
+                <li><a id='comments'></a></li>
+                <li><a id='subprojects'>Subprojects: 2 </a></li>
+                <li><a id='assignments'>Assignments: 1 </a></li>
             </nav>
-            
             <div id="container">
                 <div class="menu-btn">&#9776; <a>Project Statistics</a></div>
             </div>
             
-            <div id='header' style="text-align: center"> Subprojects </div>
-                            
+            <h1 id='pname'></h1>
+            <h3 id='header' style="text-align: center;"> Subprojects </h3>
+            <table id="table">
+                <tr>
+                    <th>Name</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Responsibility</th>
+                </tr>
+            </table>
+         
                     
         <!–-Start of jquery-->
         <link rel="stylesheet" href="pushy.css">
@@ -43,19 +51,110 @@
                 const user = aarr[aarr.length -1];
                 const parent = aarr[aarr.length-2];
                 
+                let projectName;
                 let projectOwner;
                 let projectStatus;
                 let commentCount = 0;
                 let subProjectCount = 0;
                 let assignmentCount = 0;
+                let subProjectIDs = []
 
                 // Top Bar Navigation
                 $('#home').on('click', function() {
                     window.location = `homepage.html?/${user}`;
                 })
 
-                //$('#1').append("penis");
+                $('#projects').on('click', function() {
+                    window.location = `userProjects.html?/${user}`;
+                })
+
+                $('#project').on('click', function() {
+                    window.location = `userProject.html?/${parent}/${user}`;
+                })
+                
+                // GET REQUEST FOR PROJECT
                 $.ajax({
+                    type: 'GET',
+                    url: `https://csc-394-backend.herokuapp.com//projects/${parent}`,
+                    success: function(project) {
+                        $('#pname').append(`<h2 style="text-align: center;">${project.pname}</h2>`);
+                        $('#owner').append(`Assigned By: ${project.owner}`);
+                        $('#status').append(`Status: ${project.status}`);
+
+                        commentCount += project.comments.length;
+                        
+                        // IF WE WERE TO COUNT ASSIGNMENT COMMENTS
+                        /*for (let i=0; i<project.assignments.length; i++) {
+                            commentCount += project.assignments[i].comments.length;
+                        }*/
+                        
+                        $.ajax({
+                            type: 'GET',
+                            url: `https://csc-394-backend.herokuapp.com/subprojectRoster/user/${user}`,
+                            success: function(rosters) {
+                                $.each(rosters, function(i, roster) {
+                                    subProjectIDs.push(roster.subProjectRoster.sub_project);
+                                })
+                                
+                            
+                        
+                                // THIS GETS THE SUBPROJECTS OF CURRENT PROJECT
+                                $.ajax({
+                                    type: 'GET',
+                                    url: `https://csc-394-backend.herokuapp.com/projects/${parent}/subprojects`,
+                                    success: function(subProjects) {
+                                        $.each(subProjects, function(i, subProject) {
+                                            commentCount += subProject.comments.length;
+                                            subProjectCount++;
+                                            if(subProject.status == 'Ongoing') statColor = 'bg-warning';
+                                            else if(subProject.status == 'Delayed') statColor = 'bg-danger';
+                                            else if(subProject.status == 'Complete') statColor = 'bg-success';
+                                            
+                                            for (let j=0; j<subProjectIDs.length; j++) {
+                                                if (subProjectIDs[j] == subProject.sid) {
+                                                    $('#table').append(`     
+                                                        <tr id = 'penis'>
+                                                                <td>${subProject.sname}</td>
+                                                                <td>${subProject.due_date}</td>
+                                                                <td class="${statColor}">${subProject.status}</td>
+                                                                <td><a></a>Yes</td>
+                                                        </tr> 
+                                                    `);
+                                                } else {
+                                                    $('#table').append(`
+                                                        <tr>
+                                                            <td>${subProject.sname}</td>
+                                                            <td>${subProject.due_date}</td>
+                                                            <td class="${statColor}">${subProject.status}</td>
+                                                            <td>No</td>
+                                                        </tr> 
+                                                    `);
+                                                }
+
+                                            }
+                                        })
+
+                                        
+                                        $('#comments').append(`Comments: ${commentCount}`);
+                                        /*<b>
+                                                        <h1>
+                                                            <a 
+                                                                href="userProject.html?/${subProject.sid}/${user}" 
+                                                                style="text-align: center; color:blue; text-decoration: none;">
+                                                                ${subProject.sname} 
+                                                                <text style="color: black; text-decoration: none;"> (Status: ${subProject.status}) </text>
+                                                            </a>
+                                                        </h1>*/
+                                    }
+                                })
+                            }
+                        })
+                    } // end of success
+                
+                }) // end of project request
+
+                // THIS GETS ALL THE SUBPROJECTS
+                /*$.ajax({
                     type: 'GET',
                     url: 'https://csc-394-backend.herokuapp.com/subprojects',
                     success: function(subProjects) {
@@ -72,7 +171,7 @@
                                 );
                         })
                     }
-                })
+                })*/
                 
                 /*
                 $.ajax({
