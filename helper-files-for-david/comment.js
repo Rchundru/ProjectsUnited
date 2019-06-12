@@ -10,7 +10,6 @@ function postComment() {
 	var body = document.getElementById("body").value;
 
 	// Get all the statuses (stati?), and pick the one that's selected.
-	// var stati = document.getElementsById("status").value;
 	var status = document.querySelector('input[name="status"]:checked').value;
 
 	// Get the author (somehow).
@@ -46,12 +45,6 @@ function postComment() {
 	});
 
 	alert("Another alert (just cause).");
-}
-
-function commentHelper(data) {
-
-	
-	
 }
 
 function fillTable(data) {
