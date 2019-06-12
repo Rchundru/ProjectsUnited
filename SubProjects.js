@@ -1,18 +1,12 @@
 const aarr = window.location.href.split('/');
 const sid = aarr[aarr.length-1]
 const author = aarr[aarr.length - 2];
+const user = aarr[aarr.length -2];
 const geturl = "https://csc-394-backend.herokuapp.com/subprojects/";
 const posturl = "https://csc-394-backend.herokuapp.com/comments/";
+const parent = aarr[aarr.length-3];
 
 $(document).ready( function() {
-    const user = aarr[aarr.length -2];
-    const parent = aarr[aarr.length-3];
-
-    let projectOwner;
-    let projectStatus;
-    let commentCount = 0;
-    let subProjectCount = 0;
-    let assignmentCount = 0;
     let statColor;
 
     // Top Bar Navigation
@@ -43,7 +37,13 @@ $(document).ready( function() {
                                         <tr>
                                             <th>Due Date</th>
                                             <th>Status</th>
-                                            <td rowspan="2"><div class="text-center"><button type="button" class="btn btn-primary" onclick="addForm()">Edit</button></div></td>
+                                            <td rowspan="2"><div class="text-center">
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn btn-primary" onclick="addForm()">Edit</button>
+                                                                    <button type="button" class="btn btn-danger" onclick="delSubProject()">Delete</button>
+                                                                </div>
+                                                            </div>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>${subProject.due_date}</td>
@@ -77,6 +77,23 @@ function myFunction() {
 
 function addForm() {
     document.getElementById("editForm").style.display="block";
+}
+
+function delSubProject() {
+    faith = window.confirm("Are you sure you want to delete this SubProject?")
+    if (faith) {
+        $.ajax({
+            url: "https://csc-394-backend.herokuapp.com/subprojects/" + sid,
+            type: "DELETE",
+            success: function (msg) {
+                alert("Sub Project deleted: " + msg);
+                window.location = `userProject.html?/${user}/${parent}`;
+            },
+            error: function (msg) {
+                alert(("Unknown sub project, please enter a valid sub project"))
+            }
+        });
+    };
 }
 
 
