@@ -67,6 +67,21 @@ body {
   display: none;
 }
 
+.progress{
+    width: 15%;
+    height: 10%;
+}
+
+#myBar {
+  width: 1%;
+  height: 30px;
+  background-color: #4CAF50;
+}
+#myProgress{
+width:15%;
+    background-color: #ddd;
+}
+
 @media screen and (max-width: 600px) {
   .topnav a:not(:first-child) {display: none;}
   .topnav a.icon {
