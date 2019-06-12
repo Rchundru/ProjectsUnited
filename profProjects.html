@@ -35,7 +35,7 @@
                         $.each(projects, function(i, project) {
                             numOfProjects++;
                             if (user === project.owner) {
-                                $('#projects').append(Mustache.render('<br><a href="projectProf.html?/{{pid}}/{{owner}}" style="font-size:20px;color:blue;"> {{pname}} </a>', project));
+                                $('#projects').append(Mustache.render('<br><a href="profProject.html?/{{pid}}/{{owner}}" style="font-size:20px;color:blue;"> {{pname}} </a>', project));
                             }      
                         })
                     }
@@ -74,7 +74,7 @@
                                 contentType: "application/json",
                                 success: function(newProject) {
                                     alert('New project added');
-                                    window.location = `projectsProf.html?/${user}`;
+                                    window.location = `profProjects.html?/${user}`;
                                 }
                             })
                         })
