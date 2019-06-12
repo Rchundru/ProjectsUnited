@@ -1,5 +1,58 @@
 var sid = 2;
-const curl = 'https://csc-394-backend.herokuapp.com/subprojects/';
+const geturl = 'https://csc-394-backend.herokuapp.com/subprojects/';
+const posturl = 'https://csc-394-backend.herokuapp.com/comments/';
+var whoami = 'ggk';
+
+function postComment() {
+	alert("Running post method.");
+
+	// Get the body of the comment.
+	var body = document.getElementById("body").value;
+
+	// Get all the statuses (stati?), and pick the one that's selected.
+	// var stati = document.getElementsById("status").value;
+	var status = document.querySelector('input[name="status"]:checked').value;
+
+	// Get the author (somehow).
+	var author = whoami;
+
+	alert("Building JSON object.");
+
+	var jsonObj = {
+		"status": status,
+		"body": body,
+		"author": author,
+		"sub_projects": [
+			{
+				"sid": sid
+			}
+		]
+	};
+
+	alert("Posting comment.");
+
+	$.ajax({
+		url: posturl,
+		contentType: "application/json",
+		type: "POST",
+		data: JSON.stringify(jsonObj),
+		success: function(data) {
+			//location.reload();
+			alert("Great success!");
+		},
+		error: function(data) {
+			alert("Could not post comment; data transmission error.");
+		}
+	});
+
+	alert("Another alert (just cause).");
+}
+
+function commentHelper(data) {
+
+	
+	
+}
 
 function fillTable(data) {
 	// The HTML table we'll draw.
@@ -33,9 +86,9 @@ function fillTable(data) {
 $(document).ready( function() {
 	// Make a query,
 	$.ajax({
-		url: curl + sid,
-                contentType: "application/json",
-                type: "GET",
+		url: geturl + sid,
+        contentType: "application/json",
+        type: "GET",
         // and if it succeeds, fill out our table.
         success: function(data){
             fillTable(data);

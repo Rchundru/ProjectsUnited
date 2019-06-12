@@ -9,5 +9,15 @@
 <body>
 	<script type="text/javascript" src="comment.js"></script>
 	<h2>Comments:</h2>
-	<p id="commentList"></p>
+    <p id="commentList"></p>
+    
+    <form onsubmit="postComment()">
+        <input type="text" name="body" id="body">
+        <br>
+        <label for="status"></label>
+        <input type="radio" name="status" id="status" value="&#128077;"> &#128077;
+        <input type="radio" name="status" id="status" value="&#128078;"> &#128078;
+        <br>
+        <input type="submit" value="Submit">
+    </form>
 </body>
