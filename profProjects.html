@@ -15,8 +15,8 @@
 
         <!–-Main body-->
             <h1 id ='penis'>Projects You Own</h1>
-            <div id="new"><button id ='add'>Add New Project</button></div>
             <div id='projects'></div>
+        <br><div id="new" align="center"><button id ='add'>Add New Project</button></div><br>
 
         <!–-Start of jquery-->
         <script src = jquery-3.4.1.js></script>
@@ -28,10 +28,12 @@
                 let numOfProjects = 0;
                 
                 // GET Request for projects
-                $.ajax({
+               /* $.ajax({
                     type: 'GET',
                     url: 'https://csc-394-backend.herokuapp.com/projects/',
                     success: function(projects) {
+                         var list = '<table><tr></th></th></tr>';
+                        
                         $.each(projects, function(i, project) {
                             numOfProjects++;
                             if (user === project.owner) {
@@ -39,7 +41,22 @@
                             }      
                         })
                     }
-                })
+                }) */
+     $.getJSON('https://csc-394-backend.herokuapp.com/projects/', function(data) {
+      var list = "";
+      var table = '<table><tr><th>Projects</th></tr>';
+         const curraarr = window.location.href.split('/');
+         const curruser = curraarr[curraarr.length -1];
+         console.log(curruser);
+        for(i in data){
+ 
+            if(data[i].owner === curruser){
+                console.log(data[i].owner)
+              list += '<tr><td><a href="profProject.html?/'+data[i].pid+'/'+data[i].owner+ '"'+' style="font-size:20px;color:blue;">'+data[i].pname+'</a>' +"</td></tr>";
+          }
+        }
+        document.getElementById("projects").innerHTML = table + list + "</table>";
+      });
 
                 let count = 0;
                 // POST Request for projects
