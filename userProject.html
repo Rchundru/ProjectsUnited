@@ -65,6 +65,15 @@
                             <br>
                             <button type="button" class="btn btn-primary" onclick="addSubproject()">Post</button>
                         </form>
+        
+                         <form>
+                            <br>
+                            <br>
+                            <h3>Delete Subproject</h3>
+                            <input type="text" id="sidd">Subproject ID</input>
+                            <br>
+                            <button type="button" class="btn btn-primary" onclick="deleteSubproject()">Delete</button>
+                        </form>
                     
                     <form>
                         <h2>Add Student to Subproject</h2>
@@ -211,6 +220,21 @@
 
                 // IGNORE WHATS BELOW FOR NOW ONLY FOR POSTING A COMMENT
             })
+            
+            function deleteSubproject(){
+                    var sid = document.getElementById("sidd").value;
+                        $.ajax({
+                            url: "https://csc-394-backend.herokuapp.com/subprojects/" + sid,
+                            type: "DELETE",
+                            success: function(msg){
+                                alert("Sub Project deleted: " + msg);
+                            },
+                            error: function(msg){
+                                alert(("Unknown sub project, please enter a valid sub project"))
+                            }
+                        });
+                }
+
 
             function postComment() {
                 const aarr = window.location.href.split('/');
