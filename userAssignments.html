@@ -1,10 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html>
+    <head>
+        <title>Assignment</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="globalCSS.css">
+        <link rel="stylesheet" href="pushy.css">
+        <script src = jquery-3.4.1.js></script>
+        <script src = mustache.js></script>
+        <script src="pushy.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="userAssignments.js"></script>
+    </head>
 
-</body>
+    <body>
+
+        <!–-Top navigation-->
+        <div class="topnav" id="myTopnav">
+            <a href='javascript:void(0)' id='home'>Home</a>
+            <a href='javascript:void(0)' id='projects'>Projects</a>
+            <a href='javascript:void(0)' id ='project'>Project</a>
+            <a href='javascript:void(0)' id= 'assignments' class="active">Assignments</a>
+            <a href="login.html">Log Out</a>
+        </div>
+
+        <!–-Main body-->
+        <div class="site-overlay"></div>
+
+        <h1 id='pname'></h1>
+        <h3 id='header' style="text-align: center;"> Assignments </h3>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody id="table"></tbody>
+        </table>
+
+        
+    </body>
 </html>
