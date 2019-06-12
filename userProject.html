@@ -27,7 +27,7 @@
                 <li><a href='javascript:void(0)' id='status'></a></li>
                 <li><a href='javascript:void(0)' id='comments'></a></li>
                 <li><a href='javascript:void(0)' id='subprojects'></a></li>
-                <li><a href='javascript:void(0)' id='assignments'>Assignments: 1 </a></li>
+                <li><a href='javascript:void(0)' id='assignments'>More Statistics </a></li>
                 <li><div class="container">
   <h3>Progress</h3>
   <!--<div class="progress" style="height:10px">
@@ -159,7 +159,8 @@
                         $('#owner').append(`Assigned By: ${project.owner}`);
                         $('#status').append(`Status: ${project.status}`);
 
-                        commentCount += project.comments.length;
+                        $('#comments').append(`Comments: ${project.comments.length}`);
+                        
                         
                         // IF WE WERE TO COUNT ASSIGNMENT COMMENTS
                         /*for (let i=0; i<project.assignments.length; i++) {
@@ -180,7 +181,7 @@
                                     url: `https://csc-394-backend.herokuapp.com/projects/${parent}/subprojects`,
                                     success: function(subProjects) {
                                         $.each(subProjects, function(i, subProject) {
-                                            commentCount += subProject.comments.length;
+                                            //commentCount += subProject.comments.length;
                                             subProjectCount++;
                                             if(subProject.status == 'Ongoing') statColor = 'bg-warning';
                                             else if(subProject.status == 'Delayed') statColor = 'bg-danger';
@@ -212,12 +213,11 @@
 
                                             }
                                         })
+                                        $('#subprojects').append(`Subprojects: ${subProjectCount}`);
                                     }
                                 })
                             }
                         })
-                        $('#comments').append(`Comments: ${commentCount}`);
-                        $('#subprojects').append(`Subprojects: ${subProjectCount}`);
                     } // end of success   
                 }) // end of project request
 
