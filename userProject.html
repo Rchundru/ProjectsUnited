@@ -21,7 +21,7 @@
                 <li><a id='owner'></a></li>
                 <li><a id='status'></a></li>
                 <li><a id='comments'></a></li>
-                <li><a id='subprojects'>Subprojects: 2 </a></li>
+                <li><a id='subprojects'></a></li>
                 <li><a id='assignments'>Assignments: 1 </a></li>
             </nav>
             <div id="container">
@@ -29,16 +29,32 @@
             </div>
             
             <h1 id='pname'></h1>
-            <h3 id='header' style="text-align: center;"> Subprojects </h3>
-            <table id="table">
-                <tr>
-                    <th>Name</th>
-                    <th>Due Date</th>
-                    <th>Status</th>
-                    <th>Responsibility</th>
-                </tr>
-            </table>
-         
+            
+            <div class="container" style="margin-top:30px">
+                <!-- Body of sub projects-->
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2>Subprojects:</h2>
+                        <div id='table' style="text-align: center"></div>
+                    </div>
+    
+                    <div class="col-sm-3">
+                        <h2>Project Comments:</h2>
+                        <p id="commentList"></p>
+    
+                        <form>
+                            <input type="text" name="body" id="body">
+                            <br>
+                            <input type="radio" name="stati" value="none" hidden checked>
+                            <input type="radio" name="stati" value="&#128077;"> &#128077;
+                            <input type="radio" name="stati" value="&#128078;"> &#128078;
+                            <br>
+                            <button type="button" class="btn btn-primary" onclick="postComment()">Post</button>
+                        </form>
+                    </div>
+                </div>
+                <br><br>
+            </div>
                     
         <!–-Start of jquery-->
         <link rel="stylesheet" href="pushy.css">
@@ -47,6 +63,24 @@
         <script src="pushy.min.js"></script>
         <script>
             $(document).ready(function() {
+                $('#table').append(`     
+                <tr>
+                    <th>Name</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Responsibility</th>
+                </tr>
+                `);
+
+                $('#commentList').append(`
+                    <tr>
+                        <td>Author</td>
+                        <td>Status</td>
+                        <td>Comment</td>
+                        <td>Timestamp</td>
+                    </tr> 
+                `);
+                
                 const aarr = window.location.href.split('/');
                 const user = aarr[aarr.length -1];
                 const parent = aarr[aarr.length-2];
@@ -58,6 +92,7 @@
                 let subProjectCount = 0;
                 let assignmentCount = 0;
                 let subProjectIDs = []
+                let statColor;
 
                 // Top Bar Navigation
                 $('#home').on('click', function() {
@@ -77,6 +112,17 @@
                     type: 'GET',
                     url: `https://csc-394-backend.herokuapp.com//projects/${parent}`,
                     success: function(project) {
+                        for (let index=0; index<project.comments.length;index++) {
+                            $('#commentList').append(`
+                                <tr>
+                                    <td>Author: ${project.comments[index].author}</td>
+                                    <td>Status: ${project.comments[index].status}</td>
+                                    <td>Comment: ${project.comments[index].body}</td>
+                                    <td>Timestamp: ${project.comments[index].timestamp}</td>
+                                </tr> 
+                            `);
+                        }
+
                         $('#pname').append(`<h2 style="text-align: center;">${project.pname}</h2>`);
                         $('#owner').append(`Assigned By: ${project.owner}`);
                         $('#status').append(`Status: ${project.status}`);
@@ -87,7 +133,7 @@
                         /*for (let i=0; i<project.assignments.length; i++) {
                             commentCount += project.assignments[i].comments.length;
                         }*/
-                        
+
                         $.ajax({
                             type: 'GET',
                             url: `https://csc-394-backend.herokuapp.com/subprojectRoster/user/${user}`,
@@ -96,8 +142,6 @@
                                     subProjectIDs.push(roster.subProjectRoster.sub_project);
                                 })
                                 
-                            
-                        
                                 // THIS GETS THE SUBPROJECTS OF CURRENT PROJECT
                                 $.ajax({
                                     type: 'GET',
@@ -112,12 +156,13 @@
                                             
                                             for (let j=0; j<subProjectIDs.length; j++) {
                                                 if (subProjectIDs[j] == subProject.sid) {
+                                                    // TODO Make it so you can click a whole row
                                                     $('#table').append(`     
-                                                        <tr id = 'penis'>
-                                                                <td>${subProject.sname}</td>
-                                                                <td>${subProject.due_date}</td>
-                                                                <td class="${statColor}">${subProject.status}</td>
-                                                                <td><a></a>Yes</td>
+                                                        <tr>
+                                                            <td>${subProject.sname}</td>
+                                                            <td>${subProject.due_date}</td>
+                                                            <td class="${statColor}">${subProject.status}</td>
+                                                            <td><a href = 'userProject.html'>Yes</a></td>
                                                         </tr> 
                                                     `);
                                                 } else {
@@ -133,66 +178,60 @@
 
                                             }
                                         })
-
-                                        
-                                        $('#comments').append(`Comments: ${commentCount}`);
-                                        /*<b>
-                                                        <h1>
-                                                            <a 
-                                                                href="userProject.html?/${subProject.sid}/${user}" 
-                                                                style="text-align: center; color:blue; text-decoration: none;">
-                                                                ${subProject.sname} 
-                                                                <text style="color: black; text-decoration: none;"> (Status: ${subProject.status}) </text>
-                                                            </a>
-                                                        </h1>*/
                                     }
                                 })
                             }
                         })
-                    } // end of success
-                
+                        $('#comments').append(`Comments: ${commentCount}`);
+                        $('#subprojects').append(`Subprojects: ${subProjectCount}`);
+                    } // end of success   
                 }) // end of project request
 
-                // THIS GETS ALL THE SUBPROJECTS
-                /*$.ajax({
-                    type: 'GET',
-                    url: 'https://csc-394-backend.herokuapp.com/subprojects',
-                    success: function(subProjects) {
-                        $.each(subProjects, function(i, subProject) {
-                            if (subProject.parent == parent) 
-                                subProjectCount++;
-                                $('#header').append(`
-                                    <b>
-                                    <h1>
-                                        <a href="userProject.html?/${subProject.sid}/${user}" 
-                                        style="text-align: center;color:blue;">${subProject.sname}
-                                        </a>
-                                    </h1>`
-                                );
-                        })
-                    }
-                })*/
-                
-                /*
-                $.ajax({
-                    type: 'GET',
-                    url: 'https://csc-394-backend.herokuapp.com/subprojects',
-                    success: function(subProjects) {
-                        $.each(subProjects, function(i, subProject) {
-                            if (subProject.parent == parent) 
-                                $('#header').append(`
-                                    <b>
-                                    <h1>
-                                        <a href="userProject.html?/${subProject.sid}/${user}" 
-                                        style="text-align: center;color:blue;">${subProject.sname}
-                                        </a>
-                                    </h1>`
-                                );
-                        })
-                    }
-                }) */
+                // IGNORE WHATS BELOW FOR NOW ONLY FOR POSTING A COMMENT
             })
 
+            function postComment() {
+                const aarr = window.location.href.split('/');
+                const user = aarr[aarr.length -1];
+                const parent = aarr[aarr.length-2];
+                    alert("Running post method.");
+
+                    // Get the body of the comment.
+                    var body = document.getElementById("body").value;
+                    console.log(body);
+                    // Get all the statuses (stati?), and pick the one that's selected.
+                    // var stati = document.getElementsById("status").value;
+                    var status = document.querySelector('input[name="stati"]:checked').value;
+
+                    //alert("Building JSON object.");
+
+                    var jsonObj = {
+                        "status": status,
+                        "body": body,
+                        "author": user,
+                        "projects": [
+                            {
+                                "pid": parent
+                            }
+                        ]
+                    };
+
+                    //alert("Posting comment.");
+
+                    $.ajax({
+                        url: "https://csc-394-backend.herokuapp.com/comments/",
+                        contentType: "application/json",
+                        type: "POST",
+                        data: JSON.stringify(jsonObj),
+                        success: function(data) {
+                            location.reload();
+                            //alert("Great success!");
+                        },
+                        error: function(data) {
+                            //alert("Could not post comment; data transmission error.");
+                        }
+                    });
+                }   
             /*
             <li class="pushy-submenu">
                     <button>Item 4</button>
