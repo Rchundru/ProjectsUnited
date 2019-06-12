@@ -13,20 +13,16 @@ $(document).ready( function() {
 
     // Top Bar Navigation
     $('#home').on('click', function() {
-        window.location = `homepage.html?/${owner}`;
+        window.location = `homepage.html?/user/${owner}`;
     });
 
     $('#projects').on('click', function() {
         window.location =  `userProjects.html?/${owner}`;
     });
-
-    $('#project').on('click', function() {
-        window.location =  `userProject.html?/${pid}/${owner}`;
-    });   
-    
+      
     $('#assignments').on('click', function() {
         window.location =  `userAssignments.html?/${pid}/${owner}`;
-    }); 
+    });
 
     //if(auth === -1){ return; }
 
@@ -50,7 +46,7 @@ function loadAssignment(assignment) {
             $('#aname').append(`
                 <h2>${assignment.aname}</h2>`
             );
-            
+
             $('#table').append(`
                 <tr>
                     <td>${assignment_roster.grade}</td>
@@ -98,7 +94,7 @@ function fillTable(data) {
 
 	// A series of dummy table-rows.
 	var list = "";
-	  
+
 	// For each comment,
 	for(i in data.comments){
 		// Draw a new table row,

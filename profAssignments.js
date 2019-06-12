@@ -11,16 +11,14 @@ $(document).ready( function() {
 
     // Top Bar Navigation
     $('#home').on('click', function() {
-        window.location = `homepage.html?/${owner}`;
-    });
+                        window.location = `homepage.html?/professor/${owner}`;
+                    });
+
 
     $('#projects').on('click', function() {
         window.location =  `profProjects.html?/${owner}`;
     });
 
-    $('#project').on('click', function() {
-        window.location =  `profProject.html?/${pid}/${owner}`;
-    });
 
     $('.clickable-row').on('click', function($) {
         window.location = $(this).data("href");
@@ -40,7 +38,7 @@ $(document).ready( function() {
 
 function loadAssignments(assignments) {
 	$.each(assignments, function(i, assignment) {
-        $('#table').append(`     
+        $('#table').append(`
             <tr onclick="routeToAssignment(${assignment.aid})">
                 <td>${assignment.aname}</td>
             </tr> `);

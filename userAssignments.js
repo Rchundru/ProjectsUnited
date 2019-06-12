@@ -11,16 +11,13 @@ $(document).ready( function() {
 
     // Top Bar Navigation
     $('#home').on('click', function() {
-        window.location = `homepage.html?/${owner}`;
+        window.location = `homepage.html?/user/${owner}`;
     });
 
     $('#projects').on('click', function() {
-        window.location =  `profProjects.html?/${owner}`;
+        window.location =  `userProjects.html?/${owner}`;
     });
 
-    $('#project').on('click', function() {
-        window.location =  `profProject.html?/${pid}/${owner}`;
-    });
 
     $('.clickable-row').on('click', function($) {
         window.location = $(this).data("href");
@@ -66,7 +63,7 @@ function loadAssignment(data, toLoad) {
     console.log(data);
     if(data == "") return;
     else {
-        $('#table').append(`     
+        $('#table').append(`
             <tr onclick="routeToAssignment(${toLoad.aid})">
                 <td>${toLoad.aname}</td>
             </tr> `);
